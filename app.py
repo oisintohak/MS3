@@ -1,4 +1,5 @@
 import os
+import requests
 from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
@@ -18,8 +19,19 @@ app.secret_key = os.environ.get("SECRET_KEY")
 mongo = PyMongo(app)
 
 
+# url = "https://recipe-puppy.p.rapidapi.com/"
+
+# querystring = {"q":"omelet"}
+
+# headers = {
+#     'x-rapidapi-key': "8e90b5a823msh19a4645145255f6p17d148jsn9f9aa67b3e3d",
+#     'x-rapidapi-host': "recipe-puppy.p.rapidapi.com"
+#     }
+
+# response = requests.request("GET", url, headers=headers, params=querystring)
+
 @app.route("/")
-def get_tasks():
+def base():
     return render_template("base.html")
 
 
