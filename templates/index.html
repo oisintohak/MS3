@@ -3,15 +3,15 @@
 {% block title %}We Cook{% endblock %}
 
 {% block content %}
-  <header>
+<header>
   <!-- Background image -->
   <div id="banner-image" class="text-center bg-image d-flex flex-column justify-content-center align-items-center">
-      <div id="mask" class="text-white d-flex flex-column justify-content-around align-items-center mx-3 px-3 py-3">
-          <h1>Welcome to We Cook</h1>
-          <h4>Let's cook together!</h4>
-          <p>Sign up now to start adding recipes, offer to cook for people or see who else is cooking.</p>
-          <a class="btn btn-outline-light btn-lg" href="#" role="button">SIGN ME UP!</a>
-      </div>
+    <div id="mask" class="text-white d-flex flex-column justify-content-around align-items-center mx-3 px-3 py-3">
+      <h1>Welcome to We Cook</h1>
+      <h4>Let's cook together!</h4>
+      <p>Sign up now to start adding recipes, offer to cook for people or see who else is cooking.</p>
+      <a class="btn btn-outline-light btn-lg" href="{{ url_for('register') }}" role="button">SIGN ME UP!</a>
+    </div>
   </div>
   <!-- Background image -->
 </header>

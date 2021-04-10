@@ -10,3 +10,7 @@
   background-color: rgba(0, 0, 0, 0.45);
   border-radius: 10px;
 }
+
+#center-form {
+  max-width: 800px;
+}
