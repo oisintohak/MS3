@@ -19,12 +19,12 @@
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar navbar-light fixed-top bg-light">
+  <nav class="navbar navbar-light fixed-top divider-color secondary-text-color">
     <div class="container-fluid px-0">
       <div class="row w-100 mx-auto">
         <div class="col-12 col-sm-4 mx-auto d-flex justify-content-center justify-content-sm-start align-items-center">
           <!-- Navbar brand -->
-          <a class="navbar-brand mx-0" href="#">
+          <a class="navbar-brand mx-0" href="{{ url_for('index') }}">
             <i class="fas fa-utensils"></i>
             <span class="text-decoration-underline">We Cook</span>
           </a>
@@ -33,7 +33,7 @@
           <!-- Search form -->
           <form class="d-flex input-group w-auto my-auto">
             <input type="search" class="form-control" placeholder="Type query" aria-label="Search" />
-            <button class="btn btn-outline-primary" type="button" data-mdb-ripple-color="dark">
+            <button class="btn btn-outline-dark text-primary-color accent-color" type="button" data-mdb-ripple-color="dark">
               <i class="fas fa-search"></i>
             </button>
           </form>
