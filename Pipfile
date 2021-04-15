@@ -8,6 +8,8 @@ flask = "*"
 flask-pymongo = "*"
 requests = "*"
 dnspython = "*"
+flask-wtf = "*"
+wtforms = "*"
 
 [dev-packages]
 

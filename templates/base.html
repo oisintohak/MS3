@@ -33,7 +33,8 @@
           <!-- Search form -->
           <form class="d-flex input-group w-auto my-auto">
             <input type="search" class="form-control" placeholder="Type query" aria-label="Search" />
-            <button class="btn btn-outline-dark text-primary-color accent-color" type="button" data-mdb-ripple-color="dark">
+            <button class="btn btn-outline-dark text-primary-color accent-color" type="button"
+              data-mdb-ripple-color="dark">
               <i class="fas fa-search"></i>
             </button>
           </form>
@@ -64,6 +65,19 @@
     </div>
   </nav>
   <!-- Navbar -->
+  <!-- Flashed messages -->
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <section>
+    {% for message in messages %}
+    <div class="row flashes">
+      <h4 class="text-center">{{ message }}</h4>
+    </div>
+    {% endfor %}
+  </section>
+  {% endif %}
+  {% endwith %}
+
   {% block content %}
   {% endblock %}
 
