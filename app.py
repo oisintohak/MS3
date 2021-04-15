@@ -67,6 +67,13 @@ def register():
     return render_template("register.html", form=form)
 
 
+@app.route("/logout")
+def logout():
+    flash("You have been logged out")
+    session.pop("user")
+    return redirect(url_for("index"))
+
+
 @app.route("/results")
 def results():
     return render_template("results.html")

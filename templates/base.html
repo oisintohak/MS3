@@ -49,14 +49,17 @@
               </a>
               <!-- Dropdown menu -->
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                {% if session.user %}
                 <li><a class="dropdown-item" href="#">Your Profile</a></li>
                 <li><a class="dropdown-item" href="#">Your Recipes</a></li>
                 <li>
                   <hr class="dropdown-divider" />
                 </li>
-                <li>
-                  <a class="dropdown-item" href="{{ url_for('register') }}">Register</a>
-                </li>
+                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
+                {% else %}
+                <li><a class="dropdown-item" href="#">Log In</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
               </ul>
             </li>
           </ul>
