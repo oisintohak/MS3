@@ -21,7 +21,7 @@
 .secondary-text-color  { color: #757575; }
 .divider-color         { border-color: #BDBDBD; }
 
-body {
+#main-content {
   background: var(--light-primary-background);
 }
 

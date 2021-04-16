@@ -1,0 +1,32 @@
+{% from "_render_field.html" import render_field %}
+{% extends "base.html" %}
+
+{% block title %}We Cook{% endblock %}
+
+{% block content %}
+
+<main class="vh-100 d-flex justify-content-center align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div id="center-form" class="col text-center light-primary-color">
+        <h3>Please enter your details:</h3>
+        <form method="POST" action="{{ url_for('login') }}">
+          {{ form.csrf_token }}
+          <!-- Email input -->
+          {{ render_field(form.email) }}
+          <!-- Password input -->
+          {{ render_field(form.password) }}
+          
+          {{ form.recaptcha }}
+          {% for error in form.recaptcha.error %}
+            <small>{{ error }}</small>
+          {% endfor %}
+          <!-- Submit button -->
+          <button type="submit" class="btn btn-outline-dark accent-color primary-text-color mb-4">Sign up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+{% endblock %}

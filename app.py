@@ -24,14 +24,17 @@ app.config["RECAPTCHA_PRIVATE_KEY"] = os.environ.get("RECAPTCHA_PRIVATE_KEY")
 mongo = PyMongo(app)
 
 
-class RegistrationForm(FlaskForm):
-    name = StringField('name', validators=[validators.InputRequired('Name is required'), validators.Length(
-        min=3, max=50, message='Name must be between 3 and 50 characters.')])
+class LoginForm(FlaskForm):
     email = EmailField('email', validators=[
                        validators.InputRequired('Email is required')])
     password = PasswordField('password', validators=[
                              validators.InputRequired('Password is required')])
     recaptcha = RecaptchaField()
+
+
+class RegistrationForm(LoginForm):
+    name = StringField('name', validators=[validators.InputRequired('Name is required'), validators.Length(
+        min=3, max=50, message='Name must be between 3 and 50 characters.')])
 
 
 @app.route("/")
@@ -60,11 +63,38 @@ def register():
             mongo.db.users.insert_one(new_user)
 
             # put the new user into session cookie
-            session["user"] = form.name.data
+            session["user"] = form.email.data
             flash("Registration Successful.")
-            return redirect(url_for("results", name=session["user"]))
+            return redirect(url_for("results", name=form.name.data))
 
     return render_template("register.html", form=form)
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
+    if request.method == "POST":
+        # check if email has been registered
+        email_registered = mongo.db.users.find_one(
+            {"email": (form.email.data).lower()}
+        )
+
+        if email_registered:
+            # compare hashed password to user input
+            if check_password_hash(email_registered["password"], form.password.data):
+                session["user"] = (form.email.data).lower()
+                flash("Login successful")
+                return redirect(url_for("index"))
+
+            else:
+                flash("Wrong email/password")
+                return redirect(url_for("login"))
+
+        else:
+            flash("Wrong email/password")
+            return redirect(url_for("login"))
+
+    return render_template("login.html", form=form)
 
 
 @app.route("/logout")
