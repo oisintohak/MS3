@@ -19,7 +19,7 @@
 
 <body>
   <!-- Navbar -->
-  <nav class="navbar navbar-light fixed-top divider-color secondary-text-color">
+  <nav class="dark-bottom-border navbar navbar-light divider-color secondary-text-color">
     <div class="container-fluid px-0">
       <div class="row w-100 mx-auto">
         <div class="col-12 col-sm-4 mx-auto d-flex justify-content-center justify-content-sm-start align-items-center">
@@ -50,7 +50,7 @@
               <!-- Dropdown menu -->
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 {% if session.user %}
-                <li><a class="dropdown-item" href="#">Your Profile</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('profile') }}">Your Profile</a></li>
                 <li><a class="dropdown-item" href="#">Your Recipes</a></li>
                 <li>
                   <hr class="dropdown-divider" />
@@ -71,7 +71,7 @@
   <!-- Flashed messages -->
   {% with messages = get_flashed_messages() %}
   {% if messages %}
-  <section>
+  <section id="flashed-messages">
     {% for message in messages %}
     <div class="container">
       <div class="row">

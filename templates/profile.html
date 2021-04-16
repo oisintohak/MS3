@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block styles %}
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+  <div class="row pt-2">
+    <div class="col-6">
+      <img class="img-fluid" src="{{ url_for('static', filename='images/cover.jpg') }}">
+    </div>
+    <div class="col-6">
+      <h2>Your Profile</h2>
+      <small>email@domain.com</small>
+      <p>A brief description of the user and what they enjoy about the site</p>
+
+
+    </div>
+  </div>
+  <div class="row dark-bottom-border py-2">
+    <div class="col text-center">
+      <a class="btn btn-outline-dark accent-color text-primary-color" href="#" role="button">Edit Profile</a>
+    </div>
+  </div>
+  <div class="row justify-content-center pt-4">
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="card shadow-2-strong p-1 recipe-card">
+        <h5 class="card-title text-center">Recipe Title</h5>
+        <div class="row">
+          <div class="col-6">
+            <div class="hover-overlay ripple" data-mdb-ripple-color="light">
+              <img src="{{ url_for('static', filename='images/cover.jpg') }}" class="img-fluid" />
+              <a href="#!">
+                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+              </a>
+            </div>
+          </div>
+          <div class="col-6">
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the bulk of the
+              card's content.
+            </p>
+            <a class="btn btn-outline-dark accent-color text-primary-color" href="#" role="button">View Recipe</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 mb-2">
+      <div class="card shadow-2-strong p-1 recipe-card">
+        <h5 class="card-title text-center">Recipe Title</h5>
+        <div class="row">
+          <div class="col-6">
+            <div class="hover-overlay ripple" data-mdb-ripple-color="light">
+              <img src="{{ url_for('static', filename='images/cover.jpg') }}" class="img-fluid" />
+              <a href="#!">
+                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+              </a>
+            </div>
+          </div>
+          <div class="col-6">
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the bulk of the
+              card's content.
+            </p>
+            <a class="btn btn-outline-dark accent-color text-primary-color" href="#" role="button">View Recipe</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 mb-2">
+      <div class="card shadow-2-strong p-1 recipe-card">
+        <h5 class="card-title text-center">Recipe Title</h5>
+        <div class="row">
+          <div class="col-6">
+            <div class="hover-overlay ripple" data-mdb-ripple-color="light">
+              <img src="{{ url_for('static', filename='images/cover.jpg') }}" class="img-fluid" />
+              <a href="#!">
+                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+              </a>
+            </div>
+          </div>
+          <div class="col-6">
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the bulk of the
+              card's content.
+            </p>
+            <a class="btn btn-outline-dark accent-color text-primary-color" href="#" role="button">View Recipe</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-12 col-lg-6 mb-2">
+      <div class="card shadow-2-strong p-1 recipe-card">
+        <h5 class="card-title text-center">Recipe Title</h5>
+        <div class="row">
+          <div class="col-6">
+            <div class="hover-overlay ripple" data-mdb-ripple-color="light">
+              <img src="{{ url_for('static', filename='images/cover.jpg') }}" class="img-fluid" />
+              <a href="#!">
+                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15)"></div>
+              </a>
+            </div>
+          </div>
+          <div class="col-6">
+            <p class="card-text">
+              Some quick example text to build on the card title and make up the bulk of the
+              card's content.
+            </p>
+            <a class="btn btn-outline-dark accent-color text-primary-color" href="#" role="button">View Recipe</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

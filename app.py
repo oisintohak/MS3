@@ -65,7 +65,7 @@ def register():
             # put the new user into session cookie
             session["user"] = form.email.data
             flash("Registration Successful.")
-            return redirect(url_for("results", name=form.name.data))
+            return redirect(url_for("Profile", name=form.name.data))
 
     return render_template("register.html", form=form)
 
@@ -104,9 +104,9 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/results")
-def results():
-    return render_template("results.html")
+@app.route("/profile")
+def profile():
+    return render_template("profile.html")
 
 
 if __name__ == "__main__":

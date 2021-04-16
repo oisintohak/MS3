@@ -21,6 +21,20 @@
 .secondary-text-color  { color: #757575; }
 .divider-color         { border-color: #BDBDBD; }
 
+body {
+  min-height: 100vh;
+  background: var(--light-primary-background);
+}
+
+.dark-bottom-border {
+  border-bottom: #262626 .125rem solid;
+}
+
+#flashed-messages {
+  background-color: var(--dark-primary-color);
+  color: var(--primary-text-color);
+}
+
 #main-content {
   background: var(--light-primary-background);
 }
@@ -65,4 +79,12 @@
 
 #center-form .form-control:focus {
   box-shadow: none;
+}
+
+#profile-picture {
+  height: 200px;
+}
+
+.recipe-card {
+  background-color: var(--light-primary-color);
 }
