@@ -50,11 +50,10 @@
               <!-- Dropdown menu -->
               <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                 {% if session.user %}
-                <li><a class="dropdown-item" href="{{ url_for('profile') }}">Your Profile</a></li>
-                <li><a class="dropdown-item" href="#">Your Recipes</a></li>
-                <li>
-                  <hr class="dropdown-divider" />
-                </li>
+                <li><a class="dropdown-item" href="{{ url_for('profile', user=session['user']) }}">Your Profile</a></li>
+                <li><hr class="dropdown-divider" /></li>
+                <li><a class="dropdown-item" href="#">Add Recipe</a></li>
+                <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
                 {% else %}
                 <li><a class="dropdown-item" href="{{ url_for('login') }}">Log In</a></li>
@@ -84,7 +83,7 @@
   </section>
   {% endif %}
   {% endwith %}
-<main id="main-content">
+<main class="h-100 d-flex flex-column justify-content-center" id="main-content">
 
   {% block content %}
   {% endblock %}
@@ -92,8 +91,12 @@
 </main>
 
   <!-- MDB -->
-  <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"></script> -->
-  <script type="text/javascript" src="static/js/mdb.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"></script>
+  <!-- JQUERY -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+  <!-- SCRIPT TO ALLOW DYNAMIC FORMS FOR WTFORMS -->
+  <script src="{{ url_for('static', filename='js/dynamicForm.js') }}"></script>
+  <!-- <script type="text/javascript" src="static/js/mdb.min.js"></script> -->
 
 </body>
 

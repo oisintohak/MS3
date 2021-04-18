@@ -26,6 +26,10 @@ body {
   background: var(--light-primary-background);
 }
 
+.dark-border {
+  border: #262626 .125rem solid;
+}
+
 .dark-bottom-border {
   border-bottom: #262626 .125rem solid;
 }
@@ -81,10 +85,19 @@ body {
   box-shadow: none;
 }
 
+.form-validation-error {
+  color: red;
+  list-style: none;
+}
+
 #profile-picture {
   height: 200px;
 }
 
 .recipe-card {
   background-color: var(--light-primary-color);
+}
+
+.is-hidden {
+  display: none;
 }

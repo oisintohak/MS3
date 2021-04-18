@@ -7,7 +7,7 @@ from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import StringField, PasswordField, validators
+from wtforms import Form, StringField, IntegerField, PasswordField, SelectField, FormField, FieldList, validators
 from wtforms.fields.html5 import EmailField
 if os.path.exists("env.py"):
     import env
@@ -26,15 +26,36 @@ mongo = PyMongo(app)
 
 class LoginForm(FlaskForm):
     email = EmailField('email', validators=[
-                       validators.InputRequired('Email is required')])
-    password = PasswordField('password', validators=[
-                             validators.InputRequired('Password is required')])
+        validators.InputRequired('Email is required')])
+    password = PasswordField('password', validators=[validators.InputRequired('Password is required'), validators.Length(
+        min=3, max=30, message='Password must be between 3 and 30 characters.')])
     recaptcha = RecaptchaField()
 
 
 class RegistrationForm(LoginForm):
     name = StringField('name', validators=[validators.InputRequired('Name is required'), validators.Length(
         min=3, max=50, message='Name must be between 3 and 50 characters.')])
+
+
+class IngredientForm(Form):
+    quantity = StringField('quantity')
+    ingredient = StringField('ingredient')
+
+
+class AddRecipeForm(FlaskForm):
+    name = StringField('name', validators=[validators.InputRequired('Name is required'), validators.Length(
+        min=3, max=50, message='Name must be between 3 and 50 characters.')])
+    ingredients = FieldList(FormField(IngredientForm), min_entries=2, max_entries=30)
+    servings = IntegerField('servings', validators=[validators.InputRequired('Servings is required'), validators.Length(
+        min=1, max=50, message='Servings must be between 3 and 50 characters.')])
+
+
+# class AddRecipeForm(FlaskForm):
+#     name = StringField('name', validators=[
+#                        validators.InputRequired('Recipe name is required')])
+#     ingredients =
+#     instructions
+#     picture
 
 
 @app.route("/")
@@ -63,9 +84,9 @@ def register():
             mongo.db.users.insert_one(new_user)
 
             # put the new user into session cookie
-            session["user"] = form.email.data
+            session["user"] = (form.email.data).lower()
             flash("Registration Successful.")
-            return redirect(url_for("Profile", name=form.name.data))
+            return redirect(url_for("profile", user=session["user"]))
 
     return render_template("register.html", form=form)
 
@@ -84,7 +105,7 @@ def login():
             if check_password_hash(email_registered["password"], form.password.data):
                 session["user"] = (form.email.data).lower()
                 flash("Login successful")
-                return redirect(url_for("index"))
+                return redirect(url_for("profile", user=session["user"]))
 
             else:
                 flash("Wrong email/password")
@@ -104,9 +125,17 @@ def logout():
     return redirect(url_for("index"))
 
 
-@app.route("/profile")
-def profile():
-    return render_template("profile.html")
+@app.route("/profile/<user>")
+def profile(user):
+    user = mongo.db.users.find_one(
+        {"email": user})
+    return render_template("profile.html", user=user)
+
+
+@app.route("/add_recipe")
+def add_recipe():
+    form = AddRecipeForm()
+    return render_template("add_recipe.html", form=form)
 
 
 if __name__ == "__main__":

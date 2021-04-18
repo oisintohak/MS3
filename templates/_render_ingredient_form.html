@@ -1,0 +1,19 @@
+{% macro render_ingredient_form(form) %}
+<div class="row g-2">
+  {% for field in form %}
+  
+  <div class="col-6">
+    <div class="mb-4">
+      {{ form(class_='form-control', **kwargs)|safe }}
+      {% if form.errors %}
+      <ul>
+        {% for error in form.errors %}
+        <li class="form-validation-error">{{ error }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endmacro %}

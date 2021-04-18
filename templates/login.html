@@ -1,12 +1,11 @@
 {% from "_render_field.html" import render_field %}
 {% extends "base.html" %}
 
-{% block title %}We Cook{% endblock %}
+{% block title %}Log In - We Cook{% endblock %}
 
 {% block content %}
 
-<main class="vh-100 d-flex justify-content-center align-items-center">
-  <div class="container">
+  <div class="container d-flex justify-content-center align-items-center">
     <div class="row justify-content-center">
       <div id="center-form" class="col text-center light-primary-color">
         <h3>Please enter your details:</h3>
@@ -22,11 +21,10 @@
             <small>{{ error }}</small>
           {% endfor %}
           <!-- Submit button -->
-          <button type="submit" class="btn btn-outline-dark accent-color primary-text-color mb-4">Log in</button>
+          <button type="submit" class="btn btn-outline-dark accent-color primary-text-color my-4">Log in</button>
         </form>
       </div>
     </div>
   </div>
-</main>
 
 {% endblock %}

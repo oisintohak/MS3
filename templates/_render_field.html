@@ -2,10 +2,12 @@
 <div class="form-outline mb-4">
   {{ field(class_='form-control', **kwargs)|safe }}
   <label class="form-label" for="{{ field.name }}">{{ field.label.text }}</label>
+  {% if field.errors %}
   <ul>
     {% for error in field.errors %}
-    <li>{{ error }}</li>
+    <li class="form-validation-error">{{ error }}</li>
     {% endfor %}
   </ul>
+  {% endif %}
 </div>
 {% endmacro %}
