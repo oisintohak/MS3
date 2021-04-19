@@ -2,14 +2,14 @@
 {% from "_render_ingredient_form.html" import render_ingredient_form %}
 {% extends "base.html" %}
 
-{% block title %}Register - We Cook{% endblock %}
+{% block title %}Add Recipe - We Cook{% endblock %}
 
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center">
+<div class="container d-flex justify-content-center align-items-center pt-3">
   <div class="row justify-content-center mx-1">
     <div id="center-form" class="col text-center light-primary-color">
       <h3>Add a new recipe:</h3>
-      <form method="POST" action="{{ url_for('register') }}">
+      <form method="POST" action="{{ url_for('add_recipe') }}">
         {{ form.csrf_token }}
         <!-- Name input -->
         {{ render_field(form.name) }}

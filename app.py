@@ -47,8 +47,7 @@ class AddRecipeForm(FlaskForm):
         min=3, max=50, message='Name must be between 3 and 50 characters.')])
     ingredients = FieldList(FormField(IngredientForm),
                             min_entries=2, max_entries=30)
-    servings = IntegerField('servings', validators=[validators.InputRequired('Servings is required'), validators.Length(
-        min=1, max=50, message='Servings must be between 3 and 50 characters.')])
+    servings = IntegerField('servings', validators=[validators.InputRequired('Servings is required')])
 
 
 @app.route("/")
@@ -96,9 +95,10 @@ def login():
         if email_registered:
             # compare hashed password to user input
             if check_password_hash(email_registered["password"], form.password.data):
-                session["user"] = (form.email.data).lower()
-                flash("Login successful")
-                return redirect(url_for("profile", user=session["user"]))
+                if form.validate_on_submit():
+                    session["user"] = (form.email.data).lower()
+                    flash("Login successful")
+                    return redirect(url_for("profile", user=session["user"]))
 
             else:
                 flash("Wrong email/password")
@@ -125,9 +125,13 @@ def profile(user):
     return render_template("profile.html", user=user)
 
 
-@app.route("/add_recipe")
+@app.route("/add_recipe", methods=["GET", "POST"])
 def add_recipe():
     form = AddRecipeForm()
+    if request.method == "POST":
+        if form.validate_on_submit():
+            return render_template("display_recipe.html", recipe=form)
+
     return render_template("add_recipe.html", form=form)
 
 

@@ -23,7 +23,7 @@ function adjustIndices(removedIndex) {
 
     $forms.each(function(i) {
         var $form = $(this);
-        var index = parseInt($form.data('index'));
+        var index = parseInt($form.data().index);
         var newIndex = index - 1;
 
         if (index < removedIndex) {
@@ -40,9 +40,7 @@ function adjustIndices(removedIndex) {
 
         // Change ID in form itself
         $form.attr('id', $form.attr('id').replace(index, newIndex));
-        $form.data('index', newIndex);
-        console.log(newIndex);
-        $form.dataset.index = newIndex;
+        $form.data().index = newIndex;
 
         // Change IDs in form fields
         $form.find('label, input').each(function(j) {
@@ -66,7 +64,7 @@ function adjustIndices(removedIndex) {
  */
 function removeForm() {
     var $removedForm = $(this).closest('.ingredients-subform');
-    var removedIndex = parseInt($removedForm.data('index'));
+    var removedIndex = parseInt($removedForm.data().index);
 
     $removedForm.remove();
 
@@ -87,11 +85,15 @@ function addForm() {
 
     // Get Last index
     var $lastForm = $('.ingredients-subform').last();
+    console.log('last form:');
+    console.log($lastForm);
+    console.log($lastForm.length);
 
     var newIndex = 0;
 
     if ($lastForm.length > 0) {
-        newIndex = parseInt($lastForm.data('index')) + 1;
+        newIndex = parseInt($lastForm.data().index) + 1;
+        console.log(newIndex);
     }
 
     // Maximum of 30 ingredients
@@ -103,6 +105,8 @@ function addForm() {
     var $newForm = $templateForm.clone();
 
     $newForm.attr('id', replaceTemplateIndex($newForm.attr('id'), newIndex));
+    $newForm.data().index = newIndex;
+    console.log($newForm.data().index);
     
     $newForm.find('label, input').each(function(idx) {
         var $item = $(this);
@@ -121,9 +125,7 @@ function addForm() {
     // Append
     $('#ingredients-container').append($newForm);
     $newForm.addClass('ingredients-subform');
-    console.log($newForm.dataset.index);
     $newForm.removeClass('is-hidden');
-    // $newForm.dataset.index = newIndex;
 
     $newForm.find('.remove-ingredient').click(removeForm);
 }
