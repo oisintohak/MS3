@@ -13,23 +13,54 @@
         {{ form.csrf_token }}
         <!-- Name input -->
         {{ render_field(form.name) }}
-        
-        {% for subform in form.ingredients %}
-        <div class="row g-2">
-          {% for field in subform %}
-          <div class="col-6">
-            {{ render_field(field) }}
-          </div>
+        <div id="ingredients-container">
+          {% for subform in form.ingredients %}
+          {{ render_ingredient_form(subform, loop.index0) }}
           {% endfor %}
         </div>
-        {% endfor %}
-        <a class="btn btn-outline-dark accent-color primary-text-color mb-4">
+        <a id="add-ingredient" class="btn btn-outline-dark accent-color primary-text-color mb-4" role="button">
           Add Ingredient<i class="fas fa-plus-circle"></i>
         </a>
         {{ render_field(form.servings) }}
-        <!-- Submit button -->
+        <!-- Add Recipe Button -->
         <button type="submit" class="btn btn-outline-dark accent-color primary-text-color my-4">Add Recipe</button>
       </form>
+      {# Form template used to create new forms #}
+      <div id="ingredients-_-form" class="is-hidden row g-2" data-index="_">
+
+        <div class="col-6">
+
+          <div class="form-outline mb-4">
+            <input class="form-control" id="ingredients-_-quantity" name="ingredients-_-quantity" type="text" value="">
+            <label class="form-label" for="ingredients-_-quantity" style="margin-left: 0px;">quantity</label>
+
+            <div class="form-notch">
+              <div class="form-notch-leading" style="width: 9px;"></div>
+              <div class="form-notch-middle" style="width: 52.8px;"></div>
+              <div class="form-notch-trailing"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-6">
+
+          <div class="form-outline mb-4">
+            <input class="form-control" id="ingredients-_-ingredient" name="ingredients-_-ingredient" type="text" value="">
+            <label class="form-label" for="ingredients-_-ingredient" style="margin-left: 0px;">ingredient</label>
+
+            <div class="form-notch">
+              <div class="form-notch-leading" style="width: 9px;"></div>
+              <div class="form-notch-middle" style="width: 64px;"></div>
+              <div class="form-notch-trailing"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <a class="remove-ingredient btn btn-outline-dark accent-color primary-text-color my-4" role="button">Remove
+          Ingredient</a>
+      </div>
     </div>
   </div>
 </div>

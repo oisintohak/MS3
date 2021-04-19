@@ -45,17 +45,10 @@ class IngredientForm(Form):
 class AddRecipeForm(FlaskForm):
     name = StringField('name', validators=[validators.InputRequired('Name is required'), validators.Length(
         min=3, max=50, message='Name must be between 3 and 50 characters.')])
-    ingredients = FieldList(FormField(IngredientForm), min_entries=2, max_entries=30)
+    ingredients = FieldList(FormField(IngredientForm),
+                            min_entries=2, max_entries=30)
     servings = IntegerField('servings', validators=[validators.InputRequired('Servings is required'), validators.Length(
         min=1, max=50, message='Servings must be between 3 and 50 characters.')])
-
-
-# class AddRecipeForm(FlaskForm):
-#     name = StringField('name', validators=[
-#                        validators.InputRequired('Recipe name is required')])
-#     ingredients =
-#     instructions
-#     picture
 
 
 @app.route("/")

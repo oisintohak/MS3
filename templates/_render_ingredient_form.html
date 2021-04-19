@@ -1,19 +1,11 @@
-{% macro render_ingredient_form(form) %}
-<div class="row g-2">
-  {% for field in form %}
-  
+{% macro render_ingredient_form(subform, index) %}
+{% from "_render_field.html" import render_field %}
+<div id="ingredients-{{ index }}-form" class="row g-2{% if index != '_' %} ingredients-subform{% else %} is-hidden{% endif %}" data-index="{{ index }}">
+  {% for field in subform %}
   <div class="col-6">
-    <div class="mb-4">
-      {{ form(class_='form-control', **kwargs)|safe }}
-      {% if form.errors %}
-      <ul>
-        {% for error in form.errors %}
-        <li class="form-validation-error">{{ error }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-    </div>
+    {{ render_field(field) }}
   </div>
   {% endfor %}
+  <a class="remove-ingredient btn btn-outline-dark accent-color primary-text-color my-4" role="button">Remove Ingredient</a>
 </div>
 {% endmacro %}

@@ -19,7 +19,7 @@ function replaceTemplateIndex(value, index) {
  * Adjust the indices of form fields when removing items.
  */
 function adjustIndices(removedIndex) {
-    var $forms = $('.subform');
+    var $forms = $('.ingredients-subform');
 
     $forms.each(function(i) {
         var $form = $(this);
@@ -41,9 +41,11 @@ function adjustIndices(removedIndex) {
         // Change ID in form itself
         $form.attr('id', $form.attr('id').replace(index, newIndex));
         $form.data('index', newIndex);
+        console.log(newIndex);
+        $form.dataset.index = newIndex;
 
         // Change IDs in form fields
-        $form.find('label, input, select, textarea').each(function(j) {
+        $form.find('label, input').each(function(j) {
             var $item = $(this);
 
             if ($item.is('label')) {
@@ -63,7 +65,7 @@ function adjustIndices(removedIndex) {
  * Remove a form.
  */
 function removeForm() {
-    var $removedForm = $(this).closest('.subform');
+    var $removedForm = $(this).closest('.ingredients-subform');
     var removedIndex = parseInt($removedForm.data('index'));
 
     $removedForm.remove();
@@ -76,7 +78,7 @@ function removeForm() {
  * Add a new form.
  */
 function addForm() {
-    var $templateForm = $('#lap-_-form');
+    var $templateForm = $('#ingredients-_-form');
 
     if ($templateForm.length === 0) {
         console.log('[ERROR] Cannot find template');
@@ -84,7 +86,7 @@ function addForm() {
     }
 
     // Get Last index
-    var $lastForm = $('.subform').last();
+    var $lastForm = $('.ingredients-subform').last();
 
     var newIndex = 0;
 
@@ -92,9 +94,8 @@ function addForm() {
         newIndex = parseInt($lastForm.data('index')) + 1;
     }
 
-    // Maximum of 20 subforms
-    if (newIndex >= 20) {
-        console.log('[WARNING] Reached maximum number of elements');
+    // Maximum of 30 ingredients
+    if (newIndex >= 30) {
         return;
     }
 
@@ -102,32 +103,33 @@ function addForm() {
     var $newForm = $templateForm.clone();
 
     $newForm.attr('id', replaceTemplateIndex($newForm.attr('id'), newIndex));
-    $newForm.data('index', newIndex);
-
-    $newForm.find('label, input, select, textarea').each(function(idx) {
+    
+    $newForm.find('label, input').each(function(idx) {
         var $item = $(this);
-
+        
         if ($item.is('label')) {
             // Update labels
             $item.attr('for', replaceTemplateIndex($item.attr('for'), newIndex));
             return;
         }
-
+        
         // Update other fields
         $item.attr('id', replaceTemplateIndex($item.attr('id'), newIndex));
         $item.attr('name', replaceTemplateIndex($item.attr('name'), newIndex));
     });
-
+    
     // Append
-    $('#subforms-container').append($newForm);
-    $newForm.addClass('subform');
+    $('#ingredients-container').append($newForm);
+    $newForm.addClass('ingredients-subform');
+    console.log($newForm.dataset.index);
     $newForm.removeClass('is-hidden');
+    // $newForm.dataset.index = newIndex;
 
-    $newForm.find('.remove').click(removeForm);
+    $newForm.find('.remove-ingredient').click(removeForm);
 }
 
 
 $(document).ready(function() {
-    $('#add').click(addForm);
-    $('.remove').click(removeForm);
+    $('#add-ingredient').click(addForm);
+    $('.remove-ingredient').click(removeForm);
 });
