@@ -7,7 +7,7 @@ from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import Form, StringField, IntegerField, PasswordField, SelectField, FormField, FieldList, validators
+from wtforms import Form, StringField, IntegerField, PasswordField, TextAreaField, FormField, FieldList, validators
 from wtforms.fields.html5 import EmailField
 if os.path.exists("env.py"):
     import env
@@ -38,16 +38,22 @@ class RegistrationForm(LoginForm):
 
 
 class IngredientForm(Form):
-    quantity = StringField('quantity')
-    ingredient = StringField('ingredient')
+    quantity = StringField('Quantity', validators=[validators.InputRequired('Quantity is required'), validators.Length(
+        min=0, max=20, message='Quantity must be between 0 and 20 characters.')])
+    ingredient = StringField('Ingredient', validators=[validators.InputRequired('Ingredient is required'), validators.Length(
+        min=1, max=20, message='Ingredient must be between 1 and 20 characters.')])
 
 
 class AddRecipeForm(FlaskForm):
-    name = StringField('name', validators=[validators.InputRequired('Name is required'), validators.Length(
+    name = StringField('Name', validators=[validators.InputRequired('Name is required'), validators.Length(
         min=3, max=50, message='Name must be between 3 and 50 characters.')])
     ingredients = FieldList(FormField(IngredientForm),
                             min_entries=2, max_entries=30)
-    servings = IntegerField('servings', validators=[validators.InputRequired('Servings is required')])
+    instructions = TextAreaField('Instructions', validators=[validators.InputRequired('Enter instructions for the recipe.'), validators.length(min=10, max=500, message='Instructions must be between 10 and 500 characters.')])
+    servings = IntegerField('Servings', validators=[validators.InputRequired('Servings is required')])
+    timeRequired = IntegerField('Time required (minutes)', validators=[validators.InputRequired('Enter a value for time required.')])
+
+
 
 
 @app.route("/")
@@ -127,9 +133,15 @@ def profile(user):
 
 @app.route("/add_recipe", methods=["GET", "POST"])
 def add_recipe():
+    if not session["user"]:
+        flash("You need to log in to add a recipe.")
+        return redirect(url_for("login"))
     form = AddRecipeForm()
     if request.method == "POST":
         if form.validate_on_submit():
+            new_recipe = {
+
+            }
             return render_template("display_recipe.html", recipe=form)
 
     return render_template("add_recipe.html", form=form)

@@ -79,21 +79,16 @@ function addForm() {
     var $templateForm = $('#ingredients-_-form');
 
     if ($templateForm.length === 0) {
-        console.log('[ERROR] Cannot find template');
         return;
     }
 
     // Get Last index
     var $lastForm = $('.ingredients-subform').last();
-    console.log('last form:');
-    console.log($lastForm);
-    console.log($lastForm.length);
 
     var newIndex = 0;
 
     if ($lastForm.length > 0) {
         newIndex = parseInt($lastForm.data().index) + 1;
-        console.log(newIndex);
     }
 
     // Maximum of 30 ingredients
@@ -106,7 +101,6 @@ function addForm() {
 
     $newForm.attr('id', replaceTemplateIndex($newForm.attr('id'), newIndex));
     $newForm.data().index = newIndex;
-    console.log($newForm.data().index);
     
     $newForm.find('label, input').each(function(idx) {
         var $item = $(this);

@@ -1,5 +1,5 @@
 {% macro render_field(field) %}
-<div class="form-outline mb-4">
+<div class="form-outline mb-2">
   {{ field(class_='form-control', **kwargs)|safe }}
   <label class="form-label" for="{{ field.name }}">{{ field.label.text }}</label>
   {% if field.errors %}

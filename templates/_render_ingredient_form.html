@@ -2,10 +2,12 @@
 {% from "_render_field.html" import render_field %}
 <div id="ingredients-{{ index }}-form" class="row g-2{% if index != '_' %} ingredients-subform{% else %} is-hidden{% endif %}" data-index="{{ index }}">
   {% for field in subform %}
-  <div class="col-6">
+  <div class="col-5">
     {{ render_field(field) }}
   </div>
   {% endfor %}
-  <a class="remove-ingredient btn btn-outline-dark accent-color primary-text-color my-4" role="button">Remove Ingredient</a>
+  <div class="col-2 d-flex justify-content-center align-items-center">
+    <a class="remove-ingredient dark-red-color" role="button"><i class="fas fa-minus-circle"></i></a>
+  </div>
 </div>
 {% endmacro %}
