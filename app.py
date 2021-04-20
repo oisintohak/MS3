@@ -5,24 +5,35 @@ from flask import (
     redirect, request, session, url_for)
 from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
 from flask_wtf import FlaskForm, RecaptchaField
+from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import (Form, StringField, IntegerField, PasswordField,
-                     TextAreaField, FileField, FormField, FieldList, validators)
+                     TextAreaField, FormField, FieldList, validators)
 from wtforms.fields.html5 import EmailField
+
 if os.path.exists("env.py"):
     import env
 
 
 app = Flask(__name__)
 
+# only allow files under 2MB to be uploaded 
+app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
+
+app.secret_key = os.environ.get("SECRET_KEY")
 app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
-app.secret_key = os.environ.get("SECRET_KEY")
 app.config["RECAPTCHA_PUBLIC_KEY"] = os.environ.get("RECAPTCHA_PUBLIC_KEY")
 app.config["RECAPTCHA_PRIVATE_KEY"] = os.environ.get("RECAPTCHA_PRIVATE_KEY")
 
 mongo = PyMongo(app)
+
+image_extensions = {'png', 'jpg', 'jpeg'}
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 class LoginForm(FlaskForm):
@@ -55,10 +66,14 @@ class AddRecipeForm(FlaskForm):
     servings = IntegerField('Servings', validators=[
                             validators.InputRequired('Servings is required'), validators.NumberRange(min=1, max=100, message='Servings must be between 1 and 100.')])
     time_required = IntegerField('Time required (minutes)', validators=[
-                                 validators.InputRequired('Enter a value for time required (in minutes).'),
-                                 validators.NumberRange(min=1, max=1000, message='Time required must be between 1 and 1000 (minutes).')
+                                 validators.InputRequired(
+                                     'Enter a value for time required (in minutes).'),
+                                 validators.NumberRange(
+                                     min=1, max=1000, message='Time required must be between 1 and 1000 (minutes).')
                                  ])
-    image = FileField('Recipe Image')
+    image = FileField('Recipe Image', validators=[
+        FileAllowed(image_extensions, message='Only image files are allowed')
+    ])
 
 
 @app.route("/")
@@ -161,7 +176,8 @@ def add_recipe():
             }
             if form.image.data:
                 recipe_image = request.files['image']
-                mongo.save_file(recipe_image.filename, recipe_image)
+                secured_filename = secure_filename(recipe_image.filename)
+                mongo.save_file(secured_filename, recipe_image)
                 new_recipe["recipe_image"] = recipe_image.filename
                 new_recipe["recipe_image_url"] = url_for(
                     'file', filename=recipe_image.filename)

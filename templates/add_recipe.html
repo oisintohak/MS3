@@ -28,6 +28,14 @@
         {{ render_field(form.time_required) }}
         {{ form.image.label }}
         {{ form.image }}
+        {% if form.image.errors %}
+        <ul>
+          {% for error in form.image.errors %}
+          <li class="form-validation-error">{{ error }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+        <small>Maximum file size is 2MB</small>
         <br>
         <!-- Add Recipe Button -->
         <button type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Add Recipe</button>
@@ -47,7 +55,8 @@
         </div>
         <div class="col-5">
           <div class="form-outline">
-            <input class="form-control" id="ingredients-_-ingredient" name="ingredients-_-ingredient" type="text" value="" required>
+            <input class="form-control" id="ingredients-_-ingredient" name="ingredients-_-ingredient" type="text"
+              value="" required>
             <label class="form-label" for="ingredients-_-ingredient" style="margin-left: 0px;">Ingredient</label>
             <div class="form-notch">
               <div class="form-notch-leading" style="width: 9px;"></div>
