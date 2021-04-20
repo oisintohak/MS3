@@ -9,7 +9,7 @@
   <div class="row justify-content-center mx-1">
     <div id="center-form" class="col text-center light-primary-color mb-3 shadow-2-strong">
       <h3 class="my-2">Add a new recipe:</h3>
-      <form method="POST" action="{{ url_for('add_recipe') }}">
+      <form method="POST" action="{{ url_for('add_recipe') }}" enctype="multipart/form-data">
         {{ form.csrf_token }}
         <!-- Name input -->
         {{ render_field(form.name) }}
@@ -26,8 +26,11 @@
         {{ render_field(form.instructions) }}
         {{ render_field(form.servings) }}
         {{ render_field(form.time_required) }}
+        {{ form.image.label }}
+        {{ form.image }}
+        <br>
         <!-- Add Recipe Button -->
-        <button type="submit" class="btn btn-outline-dark accent-color primary-text-color mb-2">Add Recipe</button>
+        <button type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Add Recipe</button>
       </form>
       {# Form template used to create new forms #}
       <div id="ingredients-_-form" class="is-hidden row g-2 mb-2" data-index="_">

@@ -7,7 +7,8 @@ from flask_pymongo import PyMongo
 from werkzeug.security import generate_password_hash, check_password_hash
 from bson.objectid import ObjectId
 from flask_wtf import FlaskForm, RecaptchaField
-from wtforms import Form, StringField, IntegerField, PasswordField, TextAreaField, FormField, FieldList, validators
+from wtforms import (Form, StringField, IntegerField, PasswordField,
+                     TextAreaField, FileField, FormField, FieldList, validators)
 from wtforms.fields.html5 import EmailField
 if os.path.exists("env.py"):
     import env
@@ -54,7 +55,8 @@ class AddRecipeForm(FlaskForm):
     servings = IntegerField('Servings', validators=[
                             validators.InputRequired('Servings is required')])
     time_required = IntegerField('Time required (minutes)', validators=[
-                                validators.InputRequired('Enter a value for time required.')])
+                                 validators.InputRequired('Enter a value for time required.')])
+    image = FileField('Recipe Image')
 
 
 @app.route("/")
@@ -133,7 +135,7 @@ def profile(user):
     }))
     user = mongo.db.users.find_one(
         {"email": user})
-    return render_template("profile.html", user=user, recipes=recipes, uname=uname)
+    return render_template("profile.html", user=user, recipes=recipes)
 
 
 @app.route("/add_recipe", methods=["GET", "POST"])
@@ -152,11 +154,20 @@ def add_recipe():
                 "time_required": form.time_required.data,
                 "added_by": session["user"]
             }
+            if form.image.data:
+                recipe_image = request.files['image']
+                mongo.save_file(recipe_image.filename, recipe_image)
+                new_recipe["recipe_image"] = recipe_image.filename
+                new_recipe["recipe_image_url"] = url_for('file', filename=recipe_image.filename)
             mongo.db.recipes.insert_one(new_recipe)
             return render_template("profile.html", user=session["user"])
 
     return render_template("add_recipe.html", form=form)
 
+
+@app.route('/file/<filename>')
+def file(filename):
+    return mongo.send_file(filename)
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
