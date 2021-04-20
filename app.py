@@ -49,11 +49,12 @@ class AddRecipeForm(FlaskForm):
         min=3, max=50, message='Name must be between 3 and 50 characters.')])
     ingredients = FieldList(FormField(IngredientForm),
                             min_entries=2, max_entries=30)
-    instructions = TextAreaField('Instructions', validators=[validators.InputRequired('Enter instructions for the recipe.'), validators.length(min=10, max=500, message='Instructions must be between 10 and 500 characters.')])
-    servings = IntegerField('Servings', validators=[validators.InputRequired('Servings is required')])
-    timeRequired = IntegerField('Time required (minutes)', validators=[validators.InputRequired('Enter a value for time required.')])
-
-
+    instructions = TextAreaField('Instructions', validators=[validators.InputRequired('Enter instructions for the recipe.'), validators.length(
+        min=10, max=500, message='Instructions must be between 10 and 500 characters.')])
+    servings = IntegerField('Servings', validators=[
+                            validators.InputRequired('Servings is required')])
+    time_required = IntegerField('Time required (minutes)', validators=[
+                                validators.InputRequired('Enter a value for time required.')])
 
 
 @app.route("/")
@@ -126,23 +127,33 @@ def logout():
 
 @app.route("/profile/<user>")
 def profile(user):
+    uname = session["user"]
+    recipes = list(mongo.db.recipes.find({
+        "added_by": session["user"]
+    }))
     user = mongo.db.users.find_one(
         {"email": user})
-    return render_template("profile.html", user=user)
+    return render_template("profile.html", user=user, recipes=recipes, uname=uname)
 
 
 @app.route("/add_recipe", methods=["GET", "POST"])
 def add_recipe():
-    if not session["user"]:
+    if "user" not in session:
         flash("You need to log in to add a recipe.")
         return redirect(url_for("login"))
     form = AddRecipeForm()
     if request.method == "POST":
         if form.validate_on_submit():
             new_recipe = {
-
+                "name": form.name.data,
+                "ingredients": form.ingredients.data,
+                "instructions": form.instructions.data,
+                "servings": form.servings.data,
+                "time_required": form.time_required.data,
+                "added_by": session["user"]
             }
-            return render_template("display_recipe.html", recipe=form)
+            mongo.db.recipes.insert_one(new_recipe)
+            return render_template("profile.html", user=session["user"])
 
     return render_template("add_recipe.html", form=form)
 
