@@ -53,9 +53,11 @@ class AddRecipeForm(FlaskForm):
     instructions = TextAreaField('Instructions', validators=[validators.InputRequired('Enter instructions for the recipe.'), validators.length(
         min=10, max=2000, message='Instructions must be between 10 and 2000 characters.')])
     servings = IntegerField('Servings', validators=[
-                            validators.InputRequired('Servings is required')])
+                            validators.InputRequired('Servings is required'), validators.NumberRange(min=1, max=100, message='Servings must be between 1 and 100.')])
     time_required = IntegerField('Time required (minutes)', validators=[
-                                 validators.InputRequired('Enter a value for time required.')])
+                                 validators.InputRequired('Enter a value for time required (in minutes).'),
+                                 validators.NumberRange(min=1, max=1000, message='Time required must be between 1 and 1000 (minutes).')
+                                 ])
     image = FileField('Recipe Image')
 
 
@@ -161,7 +163,8 @@ def add_recipe():
                 recipe_image = request.files['image']
                 mongo.save_file(recipe_image.filename, recipe_image)
                 new_recipe["recipe_image"] = recipe_image.filename
-                new_recipe["recipe_image_url"] = url_for('file', filename=recipe_image.filename)
+                new_recipe["recipe_image_url"] = url_for(
+                    'file', filename=recipe_image.filename)
             mongo.db.recipes.insert_one(new_recipe)
             return render_template("profile.html", user=session["user"])
 
@@ -171,6 +174,7 @@ def add_recipe():
 @app.route('/file/<filename>')
 def file(filename):
     return mongo.send_file(filename)
+
 
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
