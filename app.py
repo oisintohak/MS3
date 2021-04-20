@@ -51,7 +51,7 @@ class AddRecipeForm(FlaskForm):
     ingredients = FieldList(FormField(IngredientForm),
                             min_entries=2, max_entries=30)
     instructions = TextAreaField('Instructions', validators=[validators.InputRequired('Enter instructions for the recipe.'), validators.length(
-        min=10, max=500, message='Instructions must be between 10 and 500 characters.')])
+        min=10, max=2000, message='Instructions must be between 10 and 2000 characters.')])
     servings = IntegerField('Servings', validators=[
                             validators.InputRequired('Servings is required')])
     time_required = IntegerField('Time required (minutes)', validators=[
@@ -152,7 +152,10 @@ def add_recipe():
                 "instructions": form.instructions.data,
                 "servings": form.servings.data,
                 "time_required": form.time_required.data,
-                "added_by": session["user"]
+                "added_by": session["user"],
+                "added_by_name": mongo.db.users.find_one(
+                    {"email": session["user"]}
+                )
             }
             if form.image.data:
                 recipe_image = request.files['image']
