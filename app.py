@@ -195,19 +195,27 @@ def file(filename):
 
 
 @app.errorhandler(404)
-def error413(e):
+def error404(e):
     flash("Page not found")
     return render_template('index.html'), 404
+
 
 @app.errorhandler(413)
 def error413(e):
     flash("Image cannot exceed 2MB.")
     return render_template('add_recipe'), 413
 
+
 @app.errorhandler(503)
-def error413(e):
+def error503(e):
     flash("Server Error 503.")
     return render_template('index.html'), 503
+
+
+@app.errorhandler(500)
+def error500(e):
+    flash("Server Error 500.")
+    return render_template('index.html'), 500
 
 # if __name__ == "__main__":
 #     app.run(host=os.environ.get("IP"),
