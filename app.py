@@ -19,7 +19,7 @@ if os.path.exists("env.py"):
 
 app = Flask(__name__)
 
-# only allow files under 2MB to be uploaded 
+# only allow files under 2MB to be uploaded
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 app.secret_key = os.environ.get("SECRET_KEY")
@@ -31,6 +31,8 @@ app.config["RECAPTCHA_PRIVATE_KEY"] = os.environ.get("RECAPTCHA_PRIVATE_KEY")
 mongo = PyMongo(app)
 
 image_extensions = {'png', 'jpg', 'jpeg'}
+
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -192,7 +194,13 @@ def file(filename):
     return mongo.send_file(filename)
 
 
+@app.errorhandler(413)
+def error413(e):
+    flash("Image cannot exceed 2MB.")
+    return render_template('index.html'), 413
+
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
-            debug=True)
+            debug=False)
