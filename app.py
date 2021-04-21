@@ -43,7 +43,7 @@ class LoginForm(FlaskForm):
         validators.InputRequired('Email is required')])
     password = PasswordField('password', validators=[validators.InputRequired('Password is required'), validators.Length(
         min=3, max=30, message='Password must be between 3 and 30 characters.')])
-    recaptcha = RecaptchaField()
+    # recaptcha = RecaptchaField()
 
 
 class RegistrationForm(LoginForm):

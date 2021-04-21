@@ -52,7 +52,7 @@
                 {% if session.user %}
                 <li><a class="dropdown-item" href="{{ url_for('profile', user=session['user']) }}">Your Profile</a></li>
                 <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="#">Add Recipe</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('add_recipe') }}">Add Recipe</a></li>
                 <li><hr class="dropdown-divider" /></li>
                 <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
                 {% else %}
