@@ -203,7 +203,7 @@ def error404(e):
 @app.errorhandler(413)
 def error413(e):
     flash("Image cannot exceed 2MB.")
-    return render_template('add_recipe'), 413
+    return redirect(request.url), 413
 
 
 @app.errorhandler(503)
