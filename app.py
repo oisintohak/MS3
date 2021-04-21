@@ -209,7 +209,7 @@ def error413(e):
     flash("Server Error 503.")
     return render_template('index.html'), 503
 
-if __name__ == "__main__":
-    app.run(host=os.environ.get("IP"),
-            port=int(os.environ.get("PORT")),
-            debug=False)
+# if __name__ == "__main__":
+#     app.run(host=os.environ.get("IP"),
+#             port=int(os.environ.get("PORT")),
+#             debug=False)

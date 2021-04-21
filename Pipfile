@@ -11,6 +11,7 @@ dnspython = "*"
 flask-wtf = "*"
 wtforms = "*"
 flask-reuploaded = "*"
+gunicorn = "*"
 
 [dev-packages]
 
