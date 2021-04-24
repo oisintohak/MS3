@@ -1,6 +1,7 @@
-{% macro render_field(field) %}
+<!-- Optional value parameter is used to pass in data from the server to edit a recipe -->
+{% macro render_field(field, value) %}
 <div class="form-outline mb-2">
-  {{ field(class_='form-control', **kwargs)|safe }}
+  {{ field(class_='form-control', **{"value": value})|safe }}
   <label class="form-label" for="{{ field.name }}">{{ field.label.text }}</label>
   {% if field.errors %}
   <ul>

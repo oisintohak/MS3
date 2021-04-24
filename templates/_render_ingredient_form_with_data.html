@@ -1,10 +1,14 @@
-<!-- this macro is used to render a set of 2 inputs: quantity and ingredient -->
-{% macro render_ingredient_form(subform, index) %}
+<!-- this macro renders the quantity and ingredient inputs, with previous data inserted -->
+{% macro render_ingredient_form_with_data(subform, index, ingredient) %}
 {% from "_render_field.html" import render_field %}
 <div id="ingredients-{{ index }}-form" class="row g-2{% if index != '_' %} ingredients-subform{% else %} is-hidden{% endif %}" data-index="{{ index }}">
   {% for field in subform %}
   <div class="col-5">
-    {{ render_field(field) }}
+    {% if loop.index0 == 0 %}
+    {{ render_field(field, ingredient.quantity) }}
+    {% else %}
+    {{ render_field(field, ingredient.ingredient) }}
+    {% endif %}
   </div>
   {% endfor %}
   <div class="col-2 d-flex justify-content-center align-items-center">
