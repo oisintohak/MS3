@@ -146,7 +146,7 @@ def logout():
 @app.route("/profile/<user>")
 def profile(user):
     recipes = list(mongo.db.recipes.find({
-        "added_by": session["user"]
+        "added_by": user
     }))
     user = mongo.db.users.find_one(
         {"email": user})
@@ -179,9 +179,9 @@ def add_recipe():
                 new_recipe["recipe_image"] = recipe_image.filename
                 new_recipe["recipe_image_url"] = url_for(
                     'file', filename=recipe_image.filename)
+
             mongo.db.recipes.insert_one(new_recipe)
-            return render_template("profile.html", user=session["user"])
-        
+            return render_template("profile.html", user=mongo.db.users.find_one({"email": session["user"]}), recipes=list(mongo.db.recipes.find({"added_by": session["user"]})))
 
     return render_template("add_recipe.html", form=form)
 
@@ -193,7 +193,8 @@ def edit_recipe(recipe_id):
         return redirect(url_for("login"))
 
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
-
+    print("find recipe")
+    print(recipe)
     if recipe["added_by"] != session["user"]:
         flash("You can only edit your own recipes.")
         return redirect(url_for("profile", user=session["user"]))
@@ -222,13 +223,16 @@ def edit_recipe(recipe_id):
                 update_recipe["recipe_image"] = recipe_image.filename
                 update_recipe["recipe_image_url"] = url_for(
                     'file', filename=recipe_image.filename)
-            
-            mongo.db.recipes.update({"_id": ObjectId(recipe_id)}, update_recipe)
-            old_image_id = ObjectId((mongo.db.fs.files.find_one({"filename": old_image}))["_id"])
+
+            mongo.db.recipes.update(
+                {"_id": ObjectId(recipe_id)}, update_recipe)
+            old_image_id = ObjectId(
+                (mongo.db.fs.files.find_one({"filename": old_image}))["_id"])
+            print("old image ID")
+            print(old_image_id)
             GridFS(db).delete(old_image_id)
             flash("Recipe Updated")
-            return render_template("profile.html", user=session["user"])
-
+            return render_template("profile.html", user=mongo.db.users.find_one({"email": session["user"]}), recipes=list(mongo.db.recipes.find({"added_by": session["user"]})))
 
     return render_template("edit_recipe.html", recipe=recipe, form=form)
 

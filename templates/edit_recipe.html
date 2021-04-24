@@ -11,7 +11,7 @@
   <div class="row justify-content-center mx-1">
     <div id="center-form" class="col text-center light-primary-color mb-3 shadow-2-strong">
       <h3 class="my-2">Edit recipe:</h3>
-      <form method="POST" action="{{ url_for('add_recipe') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ url_for('edit_recipe') }}" enctype="multipart/form-data">
         {{ form.csrf_token }}
         <!-- Name input -->
         {{ render_field(form.name, recipe.name) }}
@@ -48,8 +48,9 @@
         {% endif %}
         <small>Maximum file size is 2MB</small>
         <br>
-        <!-- Add Recipe Button -->
+        <!-- Save Button -->
         <button type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Save Recipe</button>
+        <!-- Cancel Button -->
         <a class="btn btn-outline-dark grey-background text-primary-color my-2"
         href="{{ url_for('profile', user=session['user']) }}" role="button">
         Cancel
