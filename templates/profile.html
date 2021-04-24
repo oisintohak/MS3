@@ -96,7 +96,15 @@
               <small>
                 <i class="fas fa-user-circle"></i>Added by: {{ recipe.added_by }}
               </small>
-
+              <small>
+                Recipe ID: {{ recipe._id }}
+              </small>
+              {% if session.user|lower == recipe.added_by|lower %}
+              <a class="btn btn-outline-dark accent-color text-primary-color"
+                href="{{ url_for('edit_recipe', recipe_id=recipe._id) }}" role="button">
+                Edit Recipe
+              </a>
+              {% endif %}
             </div>
           </div>
         </div>

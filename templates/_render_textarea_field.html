@@ -1,0 +1,15 @@
+<!-- This macro is used to render a textarea field with content, as the standard method of accessing the fields 'value' attribute cannot be used -->
+
+{% macro render_textarea_field(field, value) %}
+<div class="form-outline mb-2">
+  <textarea class="form-control" id="instructions" name="instructions" required value="">{{ value }}</textarea>
+  <label class="form-label" for="{{ field.name }}">{{ field.label.text }}</label>
+  {% if field.errors %}
+  <ul>
+    {% for error in field.errors %}
+    <li class="form-validation-error">{{ error }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endmacro %}

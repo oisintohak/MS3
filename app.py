@@ -4,6 +4,7 @@ from flask import (
     Flask, flash, render_template,
     redirect, request, session, url_for)
 from flask_pymongo import PyMongo
+from gridfs import GridFS
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from bson.objectid import ObjectId
@@ -27,15 +28,11 @@ app.config["MONGO_DBNAME"] = os.environ.get("MONGO_DBNAME")
 app.config["MONGO_URI"] = os.environ.get("MONGO_URI")
 app.config["RECAPTCHA_PUBLIC_KEY"] = os.environ.get("RECAPTCHA_PUBLIC_KEY")
 app.config["RECAPTCHA_PRIVATE_KEY"] = os.environ.get("RECAPTCHA_PRIVATE_KEY")
+app.jinja_env.add_extension('jinja2.ext.loopcontrols')
 
 mongo = PyMongo(app)
 
 image_extensions = {'png', 'jpg', 'jpeg'}
-
-
-def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 
 class LoginForm(FlaskForm):
@@ -53,9 +50,9 @@ class RegistrationForm(LoginForm):
 
 class IngredientForm(Form):
     quantity = StringField('Quantity', validators=[validators.InputRequired('Quantity is required'), validators.Length(
-        min=0, max=20, message='Quantity must be between 0 and 20 characters.')])
+        min=0, max=30, message='Quantity must be between 0 and 30 characters.')])
     ingredient = StringField('Ingredient', validators=[validators.InputRequired('Ingredient is required'), validators.Length(
-        min=1, max=20, message='Ingredient must be between 1 and 20 characters.')])
+        min=1, max=40, message='Ingredient must be between 1 and 40 characters.')])
 
 
 class AddRecipeForm(FlaskForm):
@@ -148,9 +145,8 @@ def logout():
 
 @app.route("/profile/<user>")
 def profile(user):
-    uname = session["user"]
     recipes = list(mongo.db.recipes.find({
-        "added_by": session["user"]
+        "added_by": user
     }))
     user = mongo.db.users.find_one(
         {"email": user})
@@ -174,7 +170,7 @@ def add_recipe():
                 "added_by": session["user"],
                 "added_by_name": mongo.db.users.find_one(
                     {"email": session["user"]}
-                )
+                )["name"]
             }
             if form.image.data:
                 recipe_image = request.files['image']
@@ -183,10 +179,62 @@ def add_recipe():
                 new_recipe["recipe_image"] = recipe_image.filename
                 new_recipe["recipe_image_url"] = url_for(
                     'file', filename=recipe_image.filename)
+
             mongo.db.recipes.insert_one(new_recipe)
-            return render_template("profile.html", user=session["user"])
+            return render_template("profile.html", user=mongo.db.users.find_one({"email": session["user"]}), recipes=list(mongo.db.recipes.find({"added_by": session["user"]})))
 
     return render_template("add_recipe.html", form=form)
+
+
+@app.route("/edit_recipe/<recipe_id>", methods=["GET", "POST"])
+def edit_recipe(recipe_id):
+    if "user" not in session:
+        flash("You need to log in to edit a recipe.")
+        return redirect(url_for("login"))
+
+    recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    print("find recipe")
+    print(recipe)
+    if recipe["added_by"] != session["user"]:
+        flash("You can only edit your own recipes.")
+        return redirect(url_for("profile", user=session["user"]))
+
+    form = AddRecipeForm()
+
+    if not recipe:
+        flash("Recipe not found.")
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            update_recipe = {
+                "name": form.name.data,
+                "ingredients": form.ingredients.data,
+                "instructions": form.instructions.data,
+                "servings": form.servings.data,
+                "time_required": form.time_required.data,
+            }
+            if recipe["recipe_image"]:
+                # add code to delet old image
+                old_image = recipe["recipe_image"]
+            if form.image.data:
+                recipe_image = request.files['image']
+                secured_filename = secure_filename(recipe_image.filename)
+                mongo.save_file(secured_filename, recipe_image)
+                update_recipe["recipe_image"] = recipe_image.filename
+                update_recipe["recipe_image_url"] = url_for(
+                    'file', filename=recipe_image.filename)
+
+            mongo.db.recipes.update(
+                {"_id": ObjectId(recipe_id)}, update_recipe)
+            old_image_id = ObjectId(
+                (mongo.db.fs.files.find_one({"filename": old_image}))["_id"])
+            print("old image ID")
+            print(old_image_id)
+            GridFS(db).delete(old_image_id)
+            flash("Recipe Updated")
+            return render_template("profile.html", user=mongo.db.users.find_one({"email": session["user"]}), recipes=list(mongo.db.recipes.find({"added_by": session["user"]})))
+
+    return render_template("edit_recipe.html", recipe=recipe, form=form)
 
 
 @app.route('/file/<filename>')
