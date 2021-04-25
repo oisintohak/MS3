@@ -1,7 +1,5 @@
 {% from "_render_field.html" import render_field %}
-{% from "_render_textarea_field.html" import render_textarea_field %}
 {% from "_render_ingredient_form.html" import render_ingredient_form %}
-{% from "_render_ingredient_form_with_data.html" import render_ingredient_form_with_data %}
 {% extends "base.html" %}
 
 {% block title %}{{ recipe.name }} - Edit Recipe - We Cook{% endblock %}
@@ -11,32 +9,23 @@
   <div class="row justify-content-center mx-1">
     <div id="center-form" class="col text-center light-primary-color mb-3 shadow-2-strong">
       <h3 class="my-2">Edit recipe:</h3>
-      <form method="POST" action="{{ url_for('edit_recipe') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ url_for('edit_recipe', recipe_id=recipe._id) }}" enctype="multipart/form-data">
         {{ form.csrf_token }}
         <!-- Name input -->
-        {{ render_field(form.name, recipe.name) }}
+        {{ render_field(form.name) }}
         <!-- Ingredients -->
         <h5 class="mb-2">Add Ingredients:</h5>
         <div id="ingredients-container">
-          <!-- break the first loop after 1 iteration to render the number of ingredients in the recipe -->
           {% for subform in form.ingredients %}
-            {% for item in recipe.ingredients %}
-              {{ render_ingredient_form_with_data(subform, loop.index0, item) }}
-            {% endfor %}
-            {% break %}
+          {{ render_ingredient_form(subform, loop.index0) }}
           {% endfor %}
-          
         </div>
         <a id="add-ingredient" class="btn btn-outline-dark accent-color primary-text-color mb-2" role="button">
           Add Ingredient<i class="fas fa-plus-circle"></i>
         </a>
-        {{ render_textarea_field(form.instructions, recipe.instructions) }}
-        {{ render_field(form.servings, recipe.servings) }}
-        {{ render_field(form.time_required, recipe.time_required) }}
-        <!-- if the recipe has an image, display the filename -->
-        {% if recipe.recipe_image %}
-          <small>Current image: {{recipe.recipe_image }}</small> <br>
-        {% endif %}
+        {{ render_field(form.instructions) }}
+        {{ render_field(form.servings) }}
+        {{ render_field(form.time_required) }}
         {{ form.image.label }}
         {{ form.image }}
         {% if form.image.errors %}
@@ -48,14 +37,9 @@
         {% endif %}
         <small>Maximum file size is 2MB</small>
         <br>
-        <!-- Save Button -->
+        <!-- Add Recipe Button -->
         <button type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Save Recipe</button>
-        <!-- Cancel Button -->
-        <a class="btn btn-outline-dark grey-background text-primary-color my-2"
-        href="{{ url_for('profile', user=session['user']) }}" role="button">
-        Cancel
-        </a>
-        </form>
+      </form>
       <!--  Form template used to create new  ingredient forms  -->
       <div id="ingredients-_-form" class="is-hidden row g-2 mb-2" data-index="_">
         <div class="col-5">

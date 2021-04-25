@@ -181,7 +181,7 @@ def add_recipe():
                     'file', filename=recipe_image.filename)
 
             mongo.db.recipes.insert_one(new_recipe)
-            return render_template("profile.html", user=mongo.db.users.find_one({"email": session["user"]}), recipes=list(mongo.db.recipes.find({"added_by": session["user"]})))
+            return redirect(url_for("profile", user=session["user"]))
 
     return render_template("add_recipe.html", form=form)
 
@@ -193,29 +193,29 @@ def edit_recipe(recipe_id):
         return redirect(url_for("login"))
 
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
-    print("find recipe")
-    print(recipe)
     if recipe["added_by"] != session["user"]:
         flash("You can only edit your own recipes.")
         return redirect(url_for("profile", user=session["user"]))
 
-    form = AddRecipeForm()
+    form = AddRecipeForm(data=recipe)
 
     if not recipe:
         flash("Recipe not found.")
 
     if request.method == "POST":
         if form.validate_on_submit():
-            update_recipe = {
+            # use $set to only change the specified fields
+            update_recipe = {"$set": {
                 "name": form.name.data,
                 "ingredients": form.ingredients.data,
                 "instructions": form.instructions.data,
                 "servings": form.servings.data,
                 "time_required": form.time_required.data,
-            }
+            }}
             if recipe["recipe_image"]:
-                # add code to delet old image
+                # save reference to old image:
                 old_image = recipe["recipe_image"]
+
             if form.image.data:
                 recipe_image = request.files['image']
                 secured_filename = secure_filename(recipe_image.filename)
@@ -224,15 +224,14 @@ def edit_recipe(recipe_id):
                 update_recipe["recipe_image_url"] = url_for(
                     'file', filename=recipe_image.filename)
 
-            mongo.db.recipes.update(
+            mongo.db.recipes.update_one(
                 {"_id": ObjectId(recipe_id)}, update_recipe)
-            old_image_id = ObjectId(
-                (mongo.db.fs.files.find_one({"filename": old_image}))["_id"])
-            print("old image ID")
-            print(old_image_id)
-            GridFS(db).delete(old_image_id)
+            image = mongo.db.fs.files.find_one({"filename": old_image})
+            if image:
+                image_ID = ObjectId(image["_id"])
+                GridFS(mongo.db).delete(image_ID)
             flash("Recipe Updated")
-            return render_template("profile.html", user=mongo.db.users.find_one({"email": session["user"]}), recipes=list(mongo.db.recipes.find({"added_by": session["user"]})))
+            return redirect(url_for("profile", user=session["user"]))
 
     return render_template("edit_recipe.html", recipe=recipe, form=form)
 
@@ -244,7 +243,7 @@ def file(filename):
 
 @app.errorhandler(404)
 def error404(e):
-    flash("Page not found")
+    flash("404 - Page not found")
     return render_template('index.html'), 404
 
 
