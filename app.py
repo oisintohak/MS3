@@ -158,6 +158,7 @@ def add_recipe():
     if "user" not in session:
         flash("You need to log in to add a recipe.")
         return redirect(url_for("login"))
+    
     form = AddRecipeForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -193,14 +194,14 @@ def edit_recipe(recipe_id):
         return redirect(url_for("login"))
 
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    if not recipe:
+        flash("Recipe not found.")
+
     if recipe["added_by"] != session["user"]:
         flash("You can only edit your own recipes.")
         return redirect(url_for("profile", user=session["user"]))
 
     form = AddRecipeForm(data=recipe)
-
-    if not recipe:
-        flash("Recipe not found.")
 
     if request.method == "POST":
         if form.validate_on_submit():
@@ -212,11 +213,8 @@ def edit_recipe(recipe_id):
                 "servings": form.servings.data,
                 "time_required": form.time_required.data,
             }}
-            if recipe["recipe_image"]:
-                # save reference to old image:
-                old_image = recipe["recipe_image"]
 
-            if form.image.data:
+            if form.image.get("data"):
                 recipe_image = request.files['image']
                 secured_filename = secure_filename(recipe_image.filename)
                 mongo.save_file(secured_filename, recipe_image)
@@ -224,16 +222,51 @@ def edit_recipe(recipe_id):
                 update_recipe["recipe_image_url"] = url_for(
                     'file', filename=recipe_image.filename)
 
-            mongo.db.recipes.update_one(
-                {"_id": ObjectId(recipe_id)}, update_recipe)
+            if recipe.get("recipe_image"):
+                # save reference to old image:
+                old_image = recipe["recipe_image"]
+            
+
             image = mongo.db.fs.files.find_one({"filename": old_image})
             if image:
                 image_ID = ObjectId(image["_id"])
                 GridFS(mongo.db).delete(image_ID)
+
+            mongo.db.recipes.update_one(
+                {"_id": ObjectId(recipe_id)}, update_recipe)
             flash("Recipe Updated")
             return redirect(url_for("profile", user=session["user"]))
 
     return render_template("edit_recipe.html", recipe=recipe, form=form)
+
+
+@app.route("/delete_recipe/<recipe_id>", methods=["GET", "POST"])
+def delete_recipe(recipe_id):
+    if session.get("user"):
+        flash("You need to log in to delete a recipe.")
+        return redirect(url_for("login"))
+
+    recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
+    if recipe["added_by"] != session["user"]:
+        flash("You can delete edit your own recipes.")
+        return redirect(url_for("profile", user=session["user"]))
+
+    if not recipe:
+        flash("Recipe not found.")
+        return redirect(url_for("profile", user=session["user"]))
+
+    if recipe.get("recipe_image"):
+        # save reference to old image:
+        image_filename = recipe["recipe_image"]
+
+    image = mongo.db.fs.files.find_one({"filename": image_filename})
+    if image:
+        image_ID = ObjectId(image["_id"])
+        GridFS(mongo.db).delete(image_ID)
+
+    mongo.db.recipes.remove({"_id": ObjectId(recipe_id)})
+    flash("Recipe Deleted")
+    return redirect(url_for("profile", user=session["user"]))
 
 
 @app.route('/file/<filename>')
@@ -264,7 +297,7 @@ def error500(e):
     flash("Server Error 500.")
     return render_template('index.html'), 500
 
-# if __name__ == "__main__":
-#     app.run(host=os.environ.get("IP"),
-#             port=int(os.environ.get("PORT")),
-#             debug=False)
+if __name__ == "__main__":
+    app.run(host=os.environ.get("IP"),
+            port=int(os.environ.get("PORT")),
+            debug=False)

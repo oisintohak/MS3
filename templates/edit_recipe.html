@@ -39,6 +39,16 @@
         <br>
         <!-- Add Recipe Button -->
         <button type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Save Recipe</button>
+        <!-- Cancel Button -->
+        <a class="btn btn-outline-dark grey-background text-primary-color my-2"
+        href="{{ url_for('profile', user=session['user']) }}" role="button">
+        Cancel
+        </a>
+        <!-- Delete Recipe Button -->
+        <a class="btn btn-outline-dark dark-red-background text-primary-color my-2"
+        href="{{ url_for('delete_recipe', recipe_id=recipe._id) }}" role="button">
+        Delete Recipe
+        </a>
       </form>
       <!--  Form template used to create new  ingredient forms  -->
       <div id="ingredients-_-form" class="is-hidden row g-2 mb-2" data-index="_">
