@@ -94,6 +94,10 @@ body {
   list-style: none;
 }
 
+#profile-picture-placeholder {
+  font-size: 8em !important;
+}
+
 #profile-picture {
   height: 200px;
 }

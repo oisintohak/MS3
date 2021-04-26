@@ -12,18 +12,26 @@
   </div>
   <div class="row pt-2">
     <div class="col-6 d-flex justify-content-end">
-      <img id="profile-picture" class="img-fluid" src="{{ url_for('static', filename='images/cover.jpg') }}">
+      {% if user.profile_picture %}
+      
+      {% else %}
+      <i id="profile-picture-placeholder" class="fas fa-user"></i>
+      <!-- <img id="profile-picture" class="img-fluid" src="{{ url_for('static', filename='images/cover.jpg') }}"> -->
+      {% endif %}
     </div>
     <div class="col-6">
-      <small>{{ user.email }}</small>
-      <p>A brief description of the user and what they enjoy about the site</p>
+      {% if user.description %}
+      <p>{{ user.description }}</p>
+      {% else %}
+      <p>Write a description of yourself, what types of food you like and what you like about the website.</p>
+      {% endif %}
 
 
     </div>
   </div>
   <div class="row dark-bottom-border py-2">
     <div class="col text-center">
-      <a class="btn btn-outline-dark accent-color text-primary-color" href="#" role="button">Edit Profile</a>
+      <a class="btn btn-outline-dark accent-color text-primary-color" href="{{ url_for('edit_profile', user=session['user']) }}" role="button">Edit Profile</a>
     </div>
   </div>
   <div class="row justify-content-center pt-4">

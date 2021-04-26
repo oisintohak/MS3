@@ -36,16 +36,26 @@ image_extensions = {'png', 'jpg', 'jpeg'}
 
 
 class LoginForm(FlaskForm):
-    email = EmailField('email', validators=[
+    email = EmailField('Email', validators=[
         validators.InputRequired('Email is required')])
-    password = PasswordField('password', validators=[validators.InputRequired('Password is required'), validators.Length(
+    password = PasswordField('Password', validators=[validators.InputRequired('Password is required'), validators.Length(
         min=3, max=30, message='Password must be between 3 and 30 characters.')])
-    # recaptcha = RecaptchaField()
 
 
 class RegistrationForm(LoginForm):
-    name = StringField('name', validators=[validators.InputRequired('Name is required'), validators.Length(
+    name = StringField('Name', validators=[validators.InputRequired('Name is required'), validators.Length(
         min=3, max=50, message='Name must be between 3 and 50 characters.')])
+    # recaptcha = RecaptchaField()
+
+
+class EditProfileForm(FlaskForm):
+    name = StringField('Name', validators=[validators.InputRequired('Name is required'), validators.Length(
+        min=3, max=50, message='Name must be between 3 and 50 characters.')])
+    description = TextAreaField('Description', validators=[validators.InputRequired('Enter a description.'), validators.length(
+        min=10, max=2000, message='Description must be between 10 and 2000 characters.')])
+    profile_picture = FileField('Profile Picture', validators=[
+        FileAllowed(image_extensions, message='Only image files are allowed')
+    ])
 
 
 class IngredientForm(Form):
@@ -151,6 +161,14 @@ def profile(user):
     user = mongo.db.users.find_one(
         {"email": user})
     return render_template("profile.html", user=user, recipes=recipes)
+
+
+@app.route("/edit_profile/<user>")
+def edit_profile(user):
+    user = mongo.db.users.find_one(
+        {"email": user})
+    form = EditProfileForm(data=user)
+    return render_template("edit_profile.html", user=user, form=form)
 
 
 @app.route("/add_recipe", methods=["GET", "POST"])
