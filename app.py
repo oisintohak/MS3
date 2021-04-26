@@ -158,7 +158,7 @@ def add_recipe():
     if "user" not in session:
         flash("You need to log in to add a recipe.")
         return redirect(url_for("login"))
-    
+
     form = AddRecipeForm()
     if request.method == "POST":
         if form.validate_on_submit():
@@ -214,21 +214,18 @@ def edit_recipe(recipe_id):
                 "time_required": form.time_required.data,
             }}
 
-            if form.image.get("data"):
+            if form.image.data:
                 recipe_image = request.files['image']
                 secured_filename = secure_filename(recipe_image.filename)
                 mongo.save_file(secured_filename, recipe_image)
-                update_recipe["recipe_image"] = recipe_image.filename
-                update_recipe["recipe_image_url"] = url_for(
+                update_recipe["$set"]["recipe_image"] = recipe_image.filename
+                update_recipe["$set"]["recipe_image_url"] = url_for(
                     'file', filename=recipe_image.filename)
 
             if recipe.get("recipe_image"):
                 # save reference to old image:
                 old_image = recipe["recipe_image"]
-            
-
-            image = mongo.db.fs.files.find_one({"filename": old_image})
-            if image:
+                image = mongo.db.fs.files.find_one({"filename": old_image})
                 image_ID = ObjectId(image["_id"])
                 GridFS(mongo.db).delete(image_ID)
 
@@ -242,13 +239,13 @@ def edit_recipe(recipe_id):
 
 @app.route("/delete_recipe/<recipe_id>", methods=["GET", "POST"])
 def delete_recipe(recipe_id):
-    if session.get("user"):
+    if not session.get("user"):
         flash("You need to log in to delete a recipe.")
         return redirect(url_for("login"))
 
     recipe = mongo.db.recipes.find_one({"_id": ObjectId(recipe_id)})
     if recipe["added_by"] != session["user"]:
-        flash("You can delete edit your own recipes.")
+        flash("You can only delete your own recipes.")
         return redirect(url_for("profile", user=session["user"]))
 
     if not recipe:
@@ -258,9 +255,7 @@ def delete_recipe(recipe_id):
     if recipe.get("recipe_image"):
         # save reference to old image:
         image_filename = recipe["recipe_image"]
-
-    image = mongo.db.fs.files.find_one({"filename": image_filename})
-    if image:
+        image = mongo.db.fs.files.find_one({"filename": image_filename})
         image_ID = ObjectId(image["_id"])
         GridFS(mongo.db).delete(image_ID)
 
@@ -297,7 +292,8 @@ def error500(e):
     flash("Server Error 500.")
     return render_template('index.html'), 500
 
+
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
-            debug=False)
+            debug=True)

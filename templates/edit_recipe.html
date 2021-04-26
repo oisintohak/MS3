@@ -26,8 +26,11 @@
         {{ render_field(form.instructions) }}
         {{ render_field(form.servings) }}
         {{ render_field(form.time_required) }}
+        {% if "recipe_image" in recipe %}
+          <small>Current Image: {{ recipe.recipe_image }}</small> <br>
+        {% endif %}
         {{ form.image.label }}
-        {{ form.image }}
+        {{ form.image }} <br>
         {% if form.image.errors %}
         <ul>
           {% for error in form.image.errors %}
