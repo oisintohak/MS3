@@ -7,6 +7,7 @@ from flask_pymongo import PyMongo
 from gridfs import GridFS
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import RequestEntityTooLarge
 from bson.objectid import ObjectId
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
@@ -53,7 +54,7 @@ class EditProfileForm(FlaskForm):
         min=3, max=50, message='Name must be between 3 and 50 characters.')])
     description = TextAreaField('Description', validators=[validators.InputRequired('Enter a description.'), validators.length(
         min=10, max=2000, message='Description must be between 10 and 2000 characters.')])
-    profile_picture = FileField('Profile Picture', validators=[
+    image = FileField('Profile Picture', validators=[
         FileAllowed(image_extensions, message='Only image files are allowed')
     ])
 
@@ -184,16 +185,18 @@ def edit_profile(user):
                 "description": form.description.data,
             }}
 
-            if form.profile_picture.data:
+            if form.image.data:
                 try:
-                    profile_picture = request.files['profile_picture']
+                    profile_picture = request.files['image']
                     secured_filename = secure_filename(profile_picture.filename)
                     mongo.save_file(secured_filename, profile_picture)
-                    update_recipe["$set"]["profile_picture"] = secured_filename
-                    update_recipe["$set"]["profile_picture_url"] = url_for(
+                    update_profile["$set"]["profile_picture"] = secured_filename
+                    update_profile["$set"]["profile_picture_url"] = url_for(
                         'file', filename=secured_filename)
-                except RequestEntityTooLarge:
-                    abort(413)
+                except RequestEntityTooLarge as e:
+                    print('file too large')
+                    flash("Image cannot exceed 2MB.")
+                    return redirect(url_for('index'))
 
             if user.get("profile_picture"):
                 # save reference to old image:
@@ -335,8 +338,9 @@ def error404(e):
 
 @app.errorhandler(413)
 def error413(e):
+    print('large file')
     flash("Image cannot exceed 2MB.")
-    return redirect(request.url), 413
+    return render_template('index.html')
 
 
 @app.errorhandler(503)
@@ -351,7 +355,7 @@ def error500(e):
     return render_template('index.html'), 500
 
 
-# if __name__ == "__main__":
-#     app.run(host=os.environ.get("IP"),
-#             port=int(os.environ.get("PORT")),
-#             debug=False)
+if __name__ == "__main__":
+    app.run(host=os.environ.get("IP"),
+            port=int(os.environ.get("PORT")),
+            debug=False)

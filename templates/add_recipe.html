@@ -37,8 +37,14 @@
         {% endif %}
         <small>Maximum file size is 2MB, files must be .jpg, .jpeg or png</small>
         <br>
+        <div class="dark-red-color fw-bold text-uppercase" id="filesize-validation"></div>
         <!-- Add Recipe Button -->
-        <button type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Add Recipe</button>
+        <button id="submit-button" type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Add Recipe</button>
+        <!-- Cancel Button -->
+        <a class="btn btn-outline-dark grey-background text-primary-color my-2"
+        href="{{ url_for('profile', user=session['user']) }}" role="button">
+        Cancel
+        </a>
       </form>
       <!--  Form template used to create new  ingredient forms  -->
       <div id="ingredients-_-form" class="is-hidden row g-2 mb-2" data-index="_">
@@ -72,4 +78,8 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/validateFileSize.js') }}"></script>
 {% endblock %}

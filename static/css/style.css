@@ -113,6 +113,7 @@ body {
     box-shadow: none;
 }
 
+
 .form-validation-error {
     color: var(--dark-red-color);
     list-style: none;
