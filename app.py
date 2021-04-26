@@ -2,7 +2,7 @@ import os
 import requests
 from flask import (
     Flask, flash, render_template,
-    redirect, request, session, url_for)
+    redirect, request, session, url_for, abort)
 from flask_pymongo import PyMongo
 from gridfs import GridFS
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -163,11 +163,51 @@ def profile(user):
     return render_template("profile.html", user=user, recipes=recipes)
 
 
-@app.route("/edit_profile/<user>")
+@app.route("/edit_profile/<user>", methods=["GET", "POST"])
 def edit_profile(user):
     user = mongo.db.users.find_one(
         {"email": user})
     form = EditProfileForm(data=user)
+    if "user" not in session:
+        flash("You need to log in to edit your profile.")
+        return redirect(url_for("login"))
+
+    if user["email"] != session["user"]:
+        flash("You can only edit your own profile.")
+        return redirect(url_for("profile", user=session["user"]))
+
+    if request.method == "POST":
+        if form.validate_on_submit():
+            # use $set to only change the specified fields
+            update_profile = {"$set": {
+                "name": form.name.data,
+                "description": form.description.data,
+            }}
+
+            if form.profile_picture.data:
+                try:
+                    profile_picture = request.files['profile_picture']
+                    secured_filename = secure_filename(profile_picture.filename)
+                    mongo.save_file(secured_filename, profile_picture)
+                    update_recipe["$set"]["profile_picture"] = secured_filename
+                    update_recipe["$set"]["profile_picture_url"] = url_for(
+                        'file', filename=secured_filename)
+                except RequestEntityTooLarge:
+                    abort(413)
+
+            if user.get("profile_picture"):
+                # save reference to old image:
+                old_profile_picture = user["profile_picture"]
+                image = mongo.db.fs.files.find_one(
+                    {"filename": old_profile_picture})
+                image_ID = ObjectId(image["_id"])
+                GridFS(mongo.db).delete(image_ID)
+
+            mongo.db.users.update_one(
+                {"_id": ObjectId(user["_id"])}, update_profile)
+            flash("Profile Updated")
+            return redirect(url_for("profile", user=session["user"]))
+
     return render_template("edit_profile.html", user=user, form=form)
 
 
@@ -311,7 +351,7 @@ def error500(e):
     return render_template('index.html'), 500
 
 
-if __name__ == "__main__":
-    app.run(host=os.environ.get("IP"),
-            port=int(os.environ.get("PORT")),
-            debug=True)
+# if __name__ == "__main__":
+#     app.run(host=os.environ.get("IP"),
+#             port=int(os.environ.get("PORT")),
+#             debug=False)
