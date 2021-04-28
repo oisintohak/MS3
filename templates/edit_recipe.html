@@ -1,13 +1,10 @@
-{% from "_render_field.html" import render_field %}
-{% from "_render_ingredient_form.html" import render_ingredient_form %}
 {% extends "base.html" %}
-
 {% block title %}{{ recipe.name }} - Edit Recipe - We Cook{% endblock %}
-
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center pt-3">
+<div class="container nav-padding d-flex justify-content-center align-items-center my-4">
+  {{ render_flashed_messages() }}
   <div class="row justify-content-center mx-1">
-    <div id="center-form" class="col text-center light-primary-color mb-3 shadow-2-strong">
+    <div id="center-form" class="col text-center light-primary-color shadow-2-strong">
       <h3 class="my-2">Edit recipe:</h3>
       <form method="POST" action="{{ url_for('edit_recipe', recipe_id=recipe._id) }}" enctype="multipart/form-data">
         {{ form.csrf_token }}
@@ -87,7 +84,6 @@
   </div>
 </div>
 {% endblock %}
-
 {% block scripts %}
 <script src="{{ url_for('static', filename='js/validateFileSize.js') }}"></script>
 {% endblock %}

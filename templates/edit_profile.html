@@ -1,10 +1,10 @@
-{% from "_render_field.html" import render_field %}
 {% extends "base.html" %}
 
 {% block title %}{{ user.name }} - Edit Profile - We Cook{% endblock %}
 
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center pt-3">
+<div class="container nav-padding d-flex justify-content-center align-items-center">
+  {{ render_flashed_messages() }}
   <div class="row justify-content-center mx-1">
     <div id="center-form" class="col text-center light-primary-color mb-3 shadow-2-strong">
       <h3 class="my-2">Edit Profile:</h3>

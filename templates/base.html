@@ -1,5 +1,5 @@
+{% from "macros.html" import render_field, render_ingredient_form, render_flashed_messages %}
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -12,13 +12,12 @@
   <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css" rel="stylesheet" /> -->
   <link rel='stylesheet' href="{{ url_for('static', filename='css/mdb.min.css') }}" type='text/css' />
   <link rel='stylesheet' href="{{ url_for('static', filename='css/style.css') }}" type='text/css' />
-
   <title>{% block title %}{% endblock %}</title>
-
 </head>
 
 <body>
   <!-- Navbar -->
+  <div class="fixed-top">
   <nav class="dark-bottom-border navbar navbar-light divider-color secondary-text-color">
     <div class="container-fluid px-0">
       <div class="row w-100 mx-auto">
@@ -66,32 +65,11 @@
       </div>
     </div>
   </nav>
-  <!-- Navbar -->
-  <!-- Flashed messages -->
-  {% with messages = get_flashed_messages() %}
-  {% if messages %}
-  <section id="flashed-messages">
-    {% for message in messages %}
-    <div class="container">
-      <div class="row">
-        <div class="col">
-          <h4 class="text-center">{{ message }}</h4>
-        </div>
-      </div>
-    </div>
-    {% endfor %}
-  </section>
-  {% endif %}
-  {% endwith %}
-<main class="d-flex flex-column justify-content-center" id="main-content">
-
+</div>
   {% block content %}
   {% endblock %}
-  
-</main>
-
-{% block scripts %}
-{% endblock %}
+  {% block scripts %}
+  {% endblock %}
   <!-- MDB -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"></script>
   <!-- JQUERY -->
@@ -99,7 +77,5 @@
   <!-- SCRIPT TO ALLOW DYNAMIC FORMS FOR WTFORMS -->
   <script src="{{ url_for('static', filename='js/dynamicForm.js') }}"></script>
   <!-- <script type="text/javascript" src="static/js/mdb.min.js"></script> -->
-
 </body>
-
 </html>

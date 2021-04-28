@@ -59,6 +59,10 @@ body {
     background: var(--light-primary-background);
 }
 
+.mh-100 {
+    min-height: 100%;
+}
+
 .dark-border {
     border: #262626 .125rem solid;
 }
@@ -72,8 +76,12 @@ body {
     color: var(--primary-text-color);
 }
 
-#main-content {
-    background: var(--light-primary-background);
+#close-flashed-messages, #close-flashed-messages:visited {
+    color: var(--primary-text-color);
+}
+
+#close-flashed-messages:active {
+    color: #fff;
 }
 
 .navbar {
@@ -88,8 +96,24 @@ body {
     background-color: var(--dark-primary-color);
 }
 
+@media (max-width: 575px) {
+    .nav-padding {
+        padding-top: 100px
+    }
+}
+
+@media (min-width: 576px) {
+    .nav-padding {
+        padding-top: 63px
+    }
+}
+
+.mh-100vh {
+    min-height: 100vh;
+}
+
 #banner-image {
-    height: 100vh;
+    min-height: 100vh;
     background-image: url('../images/cover.jpg');
     background-attachment: fixed;
     background-position: center top;

@@ -1,13 +1,10 @@
-{% from "_render_field.html" import render_field %}
-{% from "_render_ingredient_form.html" import render_ingredient_form %}
 {% extends "base.html" %}
-
 {% block title %}Add Recipe - We Cook{% endblock %}
-
 {% block content %}
-<div class="container d-flex justify-content-center align-items-center pt-3">
+<div class="container nav-padding d-flex justify-content-center align-items-center my-4">
+  {{ render_flashed_messages() }}
   <div class="row justify-content-center mx-1">
-    <div id="center-form" class="col text-center light-primary-color mb-3 shadow-2-strong">
+    <div id="center-form" class="col text-center light-primary-color shadow-2-strong">
       <h3 class="my-2">Add a new recipe:</h3>
       <form method="POST" action="{{ url_for('add_recipe') }}" enctype="multipart/form-data">
         {{ form.csrf_token }}
@@ -27,7 +24,7 @@
         {{ render_field(form.servings) }}
         {{ render_field(form.time_required) }}
         {{ form.image.label }}
-        {{ form.image }}
+        {{ form.image }} <br>
         {% if form.image.errors %}
         <ul>
           {% for error in form.image.errors %}

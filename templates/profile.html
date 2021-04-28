@@ -3,8 +3,10 @@
 {% block title %}{{ user.name }}'s Profile - We Cook{% endblock %}
 
 {% block content %}
-
-<div class="container pt-3">
+<div class="nav-padding">
+  {{ render_flashed_messages() }}
+</div>
+<div class="container">
   <div class="row pt-2">
     <div class="col">
       <h5 class="text-center">{{ user.name }}'s Profile</h5>

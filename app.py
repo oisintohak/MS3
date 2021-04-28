@@ -89,6 +89,7 @@ class AddRecipeForm(FlaskForm):
 @app.route("/")
 @app.route("/index")
 def index():
+    flash("This is a flashed message")
     return render_template("index.html")
 
 
@@ -161,6 +162,7 @@ def profile(user):
     }))
     user = mongo.db.users.find_one(
         {"email": user})
+    flash("This is a flashed message")
     return render_template("profile.html", user=user, recipes=recipes)
 
 
@@ -358,4 +360,4 @@ def error500(e):
 if __name__ == "__main__":
     app.run(host=os.environ.get("IP"),
             port=int(os.environ.get("PORT")),
-            debug=False)
+            debug=True)
