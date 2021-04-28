@@ -1,19 +1,33 @@
 {% extends "base.html" %}
 {% block title %}Register - We Cook{% endblock %}
 {% block content %}
-  <div class="container nav-padding d-flex justify-content-center align-items-center mh-100vh">
-    {{ render_flashed_messages() }}
+<div class="nav-padding">
+  {{ render_flashed_messages() }}
+</div>
+  <div class="container d-flex flex-column justify-content-center align-items-center mh-100vh">
     <div class="row justify-content-center">
-      <div id="center-form" class="col text-center light-primary-color shadow-2-strong">
-        <h3>Please enter your details:</h3>
+      <div id="center-form" class="col text-center light-primary-color shadow-2-strong px-3">
+        <h3 class="py-3">Please enter your details:</h3>
         <form method="POST" action="{{ url_for('register') }}">
           {{ form.csrf_token }}
           <!-- Name input -->
-          {{ render_field(form.name) }}
+          <div class="row">
+            <div class="col-12 mb-3">
+              {{ render_field(form.name) }}
+            </div>
+          </div>
           <!-- Email input -->
-          {{ render_field(form.email) }}
+          <div class="row">
+            <div class="col-12 mb-3">
+              {{ render_field(form.email) }}              
+            </div>
+          </div>
           <!-- Password input -->
-          {{ render_field(form.password) }}
+          <div class="row">
+            <div class="col-12 mb-3">
+              {{ render_field(form.password) }}              
+            </div>
+          </div>
           {# 
             {{ form.recaptcha }}
             {% for error in form.recaptcha.error %}

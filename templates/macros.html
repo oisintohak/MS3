@@ -1,5 +1,5 @@
 {% macro render_field(field) %}
-<div class="form-outline mb-2">
+<div class="form-outline">
   {{ field(class_='form-control')|safe }}
   <label class="form-label" for="{{ field.name }}">{{ field.label.text }}</label>
   {% if field.errors %}
@@ -15,13 +15,13 @@
 <!-- this macro is used to render a set of 2 inputs: quantity and ingredient -->
 {% macro render_ingredient_form(subform, index) %}
 {% from "macros.html" import render_field %}
-<div id="ingredients-{{ index }}-form" class="row g-2{% if index != '_' %} ingredients-subform{% else %} is-hidden{% endif %}" data-index="{{ index }}">
+<div id="ingredients-{{ index }}-form" class="row mb-3 g-2{% if index != '_' %} ingredients-subform{% else %} is-hidden{% endif %}" data-index="{{ index }}">
   {% for field in subform %}
-  <div class="col-5">
+  <div class="col-5 m-0 d-flex justify-content-center align-items-center">
     {{ render_field(field) }}
   </div>
   {% endfor %}
-  <div class="col-2 d-flex justify-content-center align-items-center">
+  <div class="col-2 m-0 d-flex justify-content-center align-items-center">
     <a class="remove-ingredient dark-red-color" role="button"><i class="fas fa-minus-circle"></i></a>
   </div>
 </div>
@@ -36,7 +36,7 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <h4 class="text-center">
+        <h4 class="text-center pt-2">
           {{ message }}
           <a class="text-primary-color" id="close-flashed-messages" role="button" href="#">
             <i class="fas fa-times-circle"></i>

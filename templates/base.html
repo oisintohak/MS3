@@ -14,7 +14,6 @@
   <link rel='stylesheet' href="{{ url_for('static', filename='css/style.css') }}" type='text/css' />
   <title>{% block title %}{% endblock %}</title>
 </head>
-
 <body>
   <!-- Navbar -->
   <div class="fixed-top">
@@ -77,5 +76,6 @@
   <!-- SCRIPT TO ALLOW DYNAMIC FORMS FOR WTFORMS -->
   <script src="{{ url_for('static', filename='js/dynamicForm.js') }}"></script>
   <!-- <script type="text/javascript" src="static/js/mdb.min.js"></script> -->
+  <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

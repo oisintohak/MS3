@@ -1,32 +1,48 @@
 {% extends "base.html" %}
-
 {% block title %}{{ user.name }} - Edit Profile - We Cook{% endblock %}
-
 {% block content %}
-<div class="container nav-padding d-flex justify-content-center align-items-center">
+<div class="nav-padding">
   {{ render_flashed_messages() }}
+</div>
+<div class="container flex-column d-flex justify-content-center align-items-center my-4">
   <div class="row justify-content-center mx-1">
-    <div id="center-form" class="col text-center light-primary-color mb-3 shadow-2-strong">
-      <h3 class="my-2">Edit Profile:</h3>
+    <div id="center-form" class="col text-center light-primary-color mb-3 shadow-2-strong px-3">
+      <h3 class="my-3">Edit Profile:</h3>
       <form method="POST" action="{{ url_for('edit_profile', user=session['user']) }}" enctype="multipart/form-data">
         {{ form.csrf_token }}
         <!-- Name input -->
-        {{ render_field(form.name) }}
-        {{ render_field(form.description) }}
-        {% if "profile_picture" in user %}
-        <small>Current Image: {{ user.profile_picture }}</small> <br>
-        {% endif %}
-        {{ form.profile_picture.label }}
-        {{ form.profile_picture }} <br>
-        {% if form.profile_picture.errors %}
+        <div class="row">
+          <div class="col-12 mb-3">
+            {{ render_field(form.name) }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 mb-3">
+            {{ render_field(form.description) }}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12 mb-3 text-start">
+            <label class="form-label" for="{{ form.image.name }}">{{ form.image.label.text }}</label>
+            <input class="form-control" type="file" id="{{ form.image.name }}" name="{{ form.image.name }}">
+            <small>Maximum file size is 2MB, files must be .jpg, .jpeg or png</small>
+            <br>
+          </div>
+        </div>
+        {% if form.image.errors %}
         <ul>
-          {% for error in form.profile_picture.errors %}
+          {% for error in form.image.errors %}
           <li class="form-validation-error">{{ error }}</li>
           {% endfor %}
         </ul>
         {% endif %}
-        <small>Maximum file size is 2MB, files must be .jpg, .jpeg or png</small>
-        <br>
+        <div class="row">
+          <div class="col-12 mb-3">
+            {% if "profile_picture" in user %}
+            <small>Current Image: {{ user.profile_picture }}</small> <br>
+            {% endif %}
+          </div>
+        </div>
         <div class="dark-red-color fw-bold text-uppercase" id="filesize-validation"></div>
         <!-- Save Button -->
         <button id="submit-button" type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Save</button>
