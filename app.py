@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 
-from forms import (LoginForm, RegistrationForm, 
+from forms import (LoginForm, RegistrationForm,
                    EditProfileForm, IngredientForm, AddRecipeForm)
 
 if os.path.exists('env.py'):
@@ -94,8 +94,8 @@ def login():
 
 @app.route('/logout')
 def logout():
-    flash('You have been logged out')
     session.pop('user')
+    flash('You have been logged out')
     return redirect(url_for('index'))
 
 
@@ -151,6 +151,27 @@ def edit_profile():
     return render_template('edit_profile.html', user=user, form=form)
 
 
+@app.route('/delete_profile', methods=['GET', 'POST'])
+def delete_profile():
+    if not session.get('user'):
+        flash('You need to log in to delete your profile.')
+        return redirect(url_for('login'))
+
+    user = mongo.db.users.find_one_or_404({'email': session.get('user')})
+
+    if user.get('profile_picture'):
+        # save reference to old image:
+        image_filename = user['profile_picture']
+        image = mongo.db.fs.files.find_one({'filename': image_filename})
+        image_ID = ObjectId(image['_id'])
+        GridFS(mongo.db).delete(image_ID)
+
+    mongo.db.users.remove({'_id': ObjectId(user['_id'])})
+    session.pop('user')
+    flash('Profile Deleted')
+    return redirect(url_for('index'))
+
+
 @app.route('/add_recipe', methods=['GET', 'POST'])
 def add_recipe():
     if 'user' not in session:
@@ -191,9 +212,7 @@ def edit_recipe(recipe_id):
         flash('You need to log in to edit a recipe.')
         return redirect(url_for('login'))
 
-    recipe = mongo.db.recipes.find_one({'_id': ObjectId(recipe_id)})
-    if not recipe:
-        flash('Recipe not found.')
+    recipe = mongo.db.recipes.find_one_or_404({'_id': ObjectId(recipe_id)})
 
     if recipe['added_by'] != session['user']:
         flash('You can only edit your own recipes.')
@@ -219,13 +238,13 @@ def edit_recipe(recipe_id):
                 update_recipe['$set']['recipe_image'] = recipe_image.filename
                 update_recipe['$set']['recipe_image_url'] = url_for(
                     'file', filename=recipe_image.filename)
+                if recipe.get('recipe_image'):
+                    # save reference to old image:
+                    old_image = recipe['recipe_image']
+                    image = mongo.db.fs.files.find_one({'filename': old_image})
+                    image_ID = ObjectId(image['_id'])
+                    GridFS(mongo.db).delete(image_ID)
 
-            if recipe.get('recipe_image'):
-                # save reference to old image:
-                old_image = recipe['recipe_image']
-                image = mongo.db.fs.files.find_one({'filename': old_image})
-                image_ID = ObjectId(image['_id'])
-                GridFS(mongo.db).delete(image_ID)
 
             mongo.db.recipes.update_one(
                 {'_id': ObjectId(recipe_id)}, update_recipe)
