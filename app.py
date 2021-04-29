@@ -89,7 +89,6 @@ class AddRecipeForm(FlaskForm):
 @app.route("/")
 @app.route("/index")
 def index():
-    flash("This is a flashed message")
     return render_template("index.html")
 
 
@@ -162,7 +161,6 @@ def profile(user):
     }))
     user = mongo.db.users.find_one(
         {"email": user})
-    flash("This is a flashed message")
     return render_template("profile.html", user=user, recipes=recipes)
 
 
@@ -196,7 +194,6 @@ def edit_profile(user):
                     update_profile["$set"]["profile_picture_url"] = url_for(
                         'file', filename=secured_filename)
                 except RequestEntityTooLarge as e:
-                    print('file too large')
                     flash("Image cannot exceed 2MB.")
                     return redirect(url_for('index'))
 
@@ -247,7 +244,6 @@ def add_recipe():
             mongo.db.recipes.insert_one(new_recipe)
             return redirect(url_for("profile", user=session["user"]))
     
-    flash("This is a flashed message.")
     return render_template("add_recipe.html", form=form)
 
 
@@ -298,7 +294,6 @@ def edit_recipe(recipe_id):
             flash("Recipe Updated")
             return redirect(url_for("profile", user=session["user"]))
 
-    flash("This is a flashed message.")
     return render_template("edit_recipe.html", recipe=recipe, form=form)
 
 
@@ -342,7 +337,6 @@ def error404(e):
 
 @app.errorhandler(413)
 def error413(e):
-    print('large file')
     flash("Image cannot exceed 2MB.")
     return render_template('index.html')
 

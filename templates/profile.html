@@ -41,14 +41,18 @@
     {% for recipe in recipes %}
     <div class="col-12 col-lg-6 mb-4">
       <div class="card shadow-2-strong p-1 recipe-card">
-        <h5 class="card-title text-center">{{ recipe.name }}</h5>
+        <a class="recipe-card-link" href="#">
+          <h5 class="card-title text-center">{{ recipe.name }}</h5>
+        </a>
         <div class="row">
           <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
-            {% if recipe.recipe_image_url %}
-            <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
-            {% else %}
-            <img src="{{ url_for('static', filename='images/cover.jpg') }}" class="recipe-card-image" />
-            {% endif %}
+            <a href="#" class="recipe-card-link">
+              {% if recipe.recipe_image_url %}
+              <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
+              {% else %}
+              <i class="recipe-card-image-placeholder fas fa-utensils"></i>
+              {% endif %}
+            </a>
           </div>
           <div class="col-12 col-md-6">
             <div class="card-text">
@@ -102,11 +106,10 @@
                 <i class="far fa-clock"></i>{{ recipe.time_required }} minutes
               </small> <br>
               <small>
-                <i class="fas fa-user-circle"></i>Added by: {{ recipe.added_by }}
-              </small>
-              <small>
-                Recipe ID: {{ recipe._id }}
-              </small>
+                <a class="recipe-card-link" href="{{ url_for('profile', user=recipe.added_by) }}">
+                  <i class="fas fa-user-circle"></i>Added by: {{ recipe.added_by_name }}
+                </a>
+              </small> <br> 
               {% if session.user|lower == recipe.added_by|lower %}
               <a class="btn btn-outline-dark accent-color text-primary-color"
                 href="{{ url_for('edit_recipe', recipe_id=recipe._id) }}" role="button">

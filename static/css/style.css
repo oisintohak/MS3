@@ -88,6 +88,10 @@ body {
     background: var(--light-primary-color);
 }
 
+.navbar-brand {
+    font-size: 1.6em;
+}
+
 .dropdown-menu, .dropdown-item {
     background-color: var(--light-primary-background);
 }
@@ -156,10 +160,29 @@ body {
 }
 
 .recipe-card-image {
-    width: auto;
-    max-height: 15em;
-    max-width: 100%;
+    width: 240px;
+    max-height: 300px;
     object-fit: cover;
+}
+
+.recipe-card-image-placeholder {
+    font-size: 14em;
+}
+
+.recipe-card-link, .recipe-card-link:visited {
+    color: var(--primary-text-color);
+}
+
+.recipe-card-link:hover {
+    color: var(--dark-primary-color);
+}
+
+.recipe-card-link img, .recipe-card-link {
+    transition: all .25s linear;
+}
+
+.recipe-card-link img:active, .recipe-card-link img:hover {
+    filter: brightness(1.2) blur(1px);
 }
 
 .is-hidden {
