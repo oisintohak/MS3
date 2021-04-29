@@ -73,13 +73,47 @@
             Cancel
             </a>
             <!-- Delete Recipe Button -->
-            <a class="btn btn-sm btn-outline-dark dark-red-background text-primary-color my-2"
-            href="{{ url_for('delete_recipe', recipe_id=recipe._id) }}" role="button">
+            <button class="btn btn-sm btn-outline-dark dark-red-background text-primary-color my-2"
+            type="button"
+            data-mdb-toggle="modal"
+            data-mdb-target="#delete-modal" role="button">
             Delete Recipe
-            </a>
+          </button>
           </div>
         </div>
       </form>
+      <!-- Delete Recipe modal -->
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="delete-modal"
+  tabindex="-1"
+  aria-labelledby="delete-modal-label"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="delete-modal-label">Delete Recipe?</h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-mdb-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark grey-background text-primary-color" data-mdb-dismiss="modal">
+          Close
+        </button>
+        <a class="btn btn-outline-dark dark-red-background text-primary-color"
+        href="{{ url_for('delete_recipe', recipe_id=recipe._id) }}" role="button">
+        Delete
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
       <!--  Form template used to create new  ingredient forms  -->
       <div id="ingredients-_-form" class="is-hidden row g-2 mb-2" data-index="_">
         <div class="col-5">

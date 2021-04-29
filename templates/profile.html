@@ -31,7 +31,7 @@
   </div>
   <div class="row dark-bottom-border py-2">
     <div class="col text-center">
-      <a class="btn btn-outline-dark accent-color text-primary-color" href="{{ url_for('edit_profile', user=session['user']) }}" role="button">Edit Profile</a>
+      <a class="btn btn-outline-dark accent-color text-primary-color" href="{{ url_for('edit_profile') }}" role="button">Edit Profile</a>
     </div>
   </div>
   <div class="row justify-content-center pt-4">
@@ -59,13 +59,13 @@
               <div class="accordion" id="recipe-accordion-{{ loop.index0 }}">
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="ingredients-heading-{{ loop.index0 }}">
-                    <button class="accordion-button" type="button" data-mdb-toggle="collapse"
-                      data-mdb-target="#ingredients-collapse-{{ loop.index0 }}" aria-expanded="true"
+                    <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                      data-mdb-target="#ingredients-collapse-{{ loop.index0 }}" aria-expanded="false"
                       aria-controls="ingredients-collapse-{{ loop.index0 }}">
                       Ingredients:
                     </button>
                   </h2>
-                  <div id="ingredients-collapse-{{ loop.index0 }}" class="accordion-collapse collapse show"
+                  <div id="ingredients-collapse-{{ loop.index0 }}" class="accordion-collapse collapse"
                     aria-labelledby="ingredients-heading-{{ loop.index0 }}"
                     data-mdb-parent="#recipe-accordion-{{ loop.index0 }}">
                     <div class="accordion-body">
