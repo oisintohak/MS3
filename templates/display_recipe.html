@@ -1,52 +1,19 @@
 {% extends "base.html" %}
-{% block title %}{{ user.name }}'s Profile - We Cook{% endblock %}
+{% block title %}{{ recipe.name }} - We Cook{% endblock %}
 {% block content %}
 <div class="nav-padding">
   {{ render_flashed_messages() }}
 </div>
 <div class="container">
-  <div class="row pt-2">
-    <div class="col">
-      <h5 class="text-center">{{ user.name }}'s Profile</h5>
-    </div>
-  </div>
-  <div class="row pt-2">
-    <div class="col-6 d-flex justify-content-end">
-      {% if user.profile_picture %}
-      
-      {% else %}
-      <i id="profile-picture-placeholder" class="fas fa-user"></i>
-      <!-- <img id="profile-picture" class="img-fluid" src="{{ url_for('static', filename='images/cover.jpg') }}"> -->
-      {% endif %}
-    </div>
-    <div class="col-6">
-      {% if user.description %}
-      <p>{{ user.description }}</p>
-      {% else %}
-      <p>Write a description of yourself, what types of food you like and what you like about the website.</p>
-      {% endif %}
-
-
-    </div>
-  </div>
-  <div class="row dark-bottom-border py-2">
-    <div class="col text-center">
-      <a class="btn btn-outline-dark accent-color text-primary-color" href="{{ url_for('edit_profile') }}" role="button">Edit Profile</a>
-    </div>
-  </div>
-  <div class="row justify-content-center pt-4">
-    <div class="col-12 mb-4">
-      <h5 class="text-center">{{ user.name }}'s Recipes</h5>
-    </div>
-    {% for recipe in recipes %}
-    <div class="col-12 col-lg-6 mb-4">
+  <div class="row justify-content-center nav-padding">
+    <div class="col-12 col-lg-8 mb-4">
       <div class="card shadow-2-strong p-1 recipe-card">
-        <a class="recipe-card-link" href="{{ url_for('display_recipe', recipe_id=recipe._id) }}">
+        <a class="recipe-card-link" href="#">
           <h5 class="card-title text-center">{{ recipe.name }}</h5>
         </a>
         <div class="row">
           <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
-            <a href="{{ url_for('display_recipe', recipe_id=recipe._id) }}" class="recipe-card-link">
+            <a href="#" class="recipe-card-link">
               {% if recipe.recipe_image_url %}
               <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
               {% else %}
@@ -56,18 +23,18 @@
           </div>
           <div class="col-12 col-md-6">
             <div class="card-text">
-              <div class="accordion" id="recipe-accordion-{{ loop.index0 }}">
+              <div class="accordion" id="recipe-accordion">
                 <div class="accordion-item">
-                  <h2 class="accordion-header" id="ingredients-heading-{{ loop.index0 }}">
+                  <h2 class="accordion-header" id="ingredients-heading">
                     <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
-                      data-mdb-target="#ingredients-collapse-{{ loop.index0 }}" aria-expanded="false"
-                      aria-controls="ingredients-collapse-{{ loop.index0 }}">
+                      data-mdb-target="#ingredients-collapse" aria-expanded="false"
+                      aria-controls="ingredients-collapse">
                       Ingredients:
                     </button>
                   </h2>
-                  <div id="ingredients-collapse-{{ loop.index0 }}" class="accordion-collapse collapse"
-                    aria-labelledby="ingredients-heading-{{ loop.index0 }}"
-                    data-mdb-parent="#recipe-accordion-{{ loop.index0 }}">
+                  <div id="ingredients-collapse" class="accordion-collapse collapse"
+                    aria-labelledby="ingredients-heading"
+                    data-mdb-parent="#recipe-accordion">
                     <div class="accordion-body">
                       <ul>
                         {% for ingredient in recipe.ingredients %}
@@ -80,16 +47,16 @@
                   </div>
                 </div>
                 <div class="accordion-item">
-                  <h2 class="accordion-header" id="instructions-heading-{{ loop.index0 }}">
+                  <h2 class="accordion-header" id="instructions-heading">
                     <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
-                      data-mdb-target="#instructions-collapse-{{ loop.index0 }}" aria-expanded="false"
-                      aria-controls="instructions-collapse-{{ loop.index0 }}">
+                      data-mdb-target="#instructions-collapse" aria-expanded="false"
+                      aria-controls="instructions-collapse">
                       Instructions:
                     </button>
                   </h2>
-                  <div id="instructions-collapse-{{ loop.index0 }}" class="accordion-collapse collapse"
-                    aria-labelledby="instructions-heading-{{ loop.index0 }}"
-                    data-mdb-parent="#recipe-accordion-{{ loop.index0 }}">
+                  <div id="instructions-collapse" class="accordion-collapse collapse"
+                    aria-labelledby="instructions-heading"
+                    data-mdb-parent="#recipe-accordion">
                     <div class="accordion-body">
                       <p>
                         {{ recipe.instructions }}
@@ -121,7 +88,6 @@
         </div>
       </div>
     </div>
-    {% endfor %}
 
   </div>
 </div>

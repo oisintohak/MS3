@@ -5,7 +5,7 @@
   {{ render_flashed_messages() }}
 </div>
 <div class="container">
-  <div class="row pt-4">
+  <div class="row nav-padding">
     <div class="col">
       <h5 class="text-center">Search Results:</h5>
     </div>
@@ -18,12 +18,12 @@
     {% for recipe in recipes %}
     <div class="col-12 col-lg-6 mb-4">
       <div class="card shadow-2-strong p-1 recipe-card">
-        <a class="recipe-card-link" href="#">
+        <a class="recipe-card-link" href="{{ url_for('display_recipe', recipe_id=recipe._id) }}">
           <h5 class="card-title text-center">{{ recipe.name }}</h5>
         </a>
         <div class="row">
           <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
-            <a href="#" class="recipe-card-link">
+            <a href="{{ url_for('display_recipe', recipe_id=recipe._id) }}" class="recipe-card-link">
               {% if recipe.recipe_image_url %}
               <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
               {% else %}

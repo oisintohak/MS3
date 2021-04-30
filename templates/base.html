@@ -1,5 +1,6 @@
 {% from "macros.html" import render_field, render_ingredient_form, render_flashed_messages %}
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,57 +17,67 @@
   <!-- Icon taken from fontawesome.com, see https://fontawesome.com/license for license details -->
   <title>{% block title %}{% endblock %}</title>
 </head>
+
 <body>
   <!-- Navbar -->
   <div class="fixed-top">
-  <nav class="dark-bottom-border navbar navbar-light divider-color secondary-text-color">
-    <div class="container-fluid px-0">
-      <div class="row w-100 mx-auto">
-        <div class="col-12 col-sm-4 mx-auto d-flex justify-content-center justify-content-sm-start align-items-center">
-          <!-- Navbar brand -->
-          <a class="navbar-brand mx-0" href="{{ url_for('index') }}">
-            <i class="fas fa-utensils"></i>
-            <span class="text-decoration-underline ps-1">We Cook</span>
-          </a>
-        </div>
-        <div class="col-8 col-sm-4 d-flex justify-content-sm-center align-items-center">
-          <!-- Search form -->
-          <form method="POST" action="{{ url_for('search') }}" class="d-flex input-group w-auto my-auto">
-            {{ render_field(search_form.search) }}
-            <button class="btn btn-outline-dark text-primary-color accent-color" type="submit"
-              data-mdb-ripple-color="dark">
-              <i class="fas fa-search"></i>
-            </button>
-          </form>
-        </div>
-        <div class="col-4 col-sm-4 d-flex flex-row justify-content-end align-items-center">
-          <!-- Navbar dropdown -->
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-mdb-toggle="dropdown"
-                aria-expanded="false">
-                <i class="fs-3 fas fa-user"></i>
-              </a>
-              <!-- Dropdown menu -->
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                {% if session.user %}
-                <li><a class="dropdown-item" href="{{ url_for('profile', user=session['user']) }}">Your Profile</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="{{ url_for('add_recipe') }}">Add Recipe</a></li>
-                <li><hr class="dropdown-divider" /></li>
-                <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
-                {% else %}
-                <li><a class="dropdown-item" href="{{ url_for('login') }}">Log In</a></li>
-                <li><a class="dropdown-item" href="{{ url_for('register') }}">Register</a></li>
-                {% endif %}
-              </ul>
-            </li>
-          </ul>
+    <nav class="dark-bottom-border navbar navbar-light divider-color secondary-text-color">
+      <div class="container-fluid px-0">
+        <div class="row w-100 mx-auto">
+          <div
+            class="col-12 col-sm-4 mx-auto d-flex justify-content-center justify-content-sm-start align-items-center">
+            <!-- Navbar brand -->
+            <a class="navbar-brand mx-0" href="{{ url_for('index') }}">
+              <i class="fas fa-utensils"></i>
+              <span class="text-decoration-underline ps-1">We Cook</span>
+            </a>
+          </div>
+          <div class="col-8 col-sm-4 d-flex justify-content-sm-center align-items-center">
+            <!-- Search form -->
+            <form method="POST" action="{{ url_for('search') }}" class="d-flex w-auto my-auto">
+              <div class="form-outline">
+                <input type="search" id="search" name="search" class="form-control" />
+                <label class="form-label" for="search">Search</label>
+              </div>
+              <button type="submit" class="btn btn-outline-dark text-primary-color accent-color"
+                data-mdb-ripple-color="dark">
+                <i class="fas fa-search"></i>
+              </button>
+            </form>
+          </div>
+          <div class="col-4 d-flex flex-row justify-content-end align-items-center">
+            <!-- Navbar dropdown -->
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                  data-mdb-toggle="dropdown" aria-expanded="false">
+                  <i class="fs-3 fas fa-user"></i>
+                </a>
+                <!-- Dropdown menu -->
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                  {% if session.user %}
+                  <li><a class="dropdown-item" href="{{ url_for('profile', user=session['user']) }}">Your Profile</a>
+                  </li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li><a class="dropdown-item" href="{{ url_for('add_recipe') }}">Add Recipe</a></li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
+                  {% else %}
+                  <li><a class="dropdown-item" href="{{ url_for('login') }}">Log In</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('register') }}">Register</a></li>
+                  {% endif %}
+                </ul>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
-    </div>
-  </nav>
-</div>
+    </nav>
+  </div>
   {% block content %}
   {% endblock %}
   {% block scripts %}
@@ -74,10 +85,13 @@
   <!-- MDB -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"></script>
   <!-- JQUERY -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+    crossorigin="anonymous"></script>
   <!-- SCRIPT TO ALLOW DYNAMIC FORMS FOR WTFORMS -->
   <script src="{{ url_for('static', filename='js/dynamicForm.js') }}"></script>
   <!-- <script type="text/javascript" src="static/js/mdb.min.js"></script> -->
   <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
+
 </html>

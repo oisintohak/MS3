@@ -112,14 +112,22 @@ def logout():
     return redirect(url_for('index'))
 
 
+@app.route('/display_recipe/<recipe_id>')
+def display_recipe(recipe_id):
+    recipe = mongo.db.recipes.find_one_or_404({'_id': ObjectId(recipe_id)})
+    search_form = SearchForm()
+    return render_template('display_recipe.html', recipe=recipe, search_form=search_form)
+
+
+
 @app.route('/profile/<user>')
 def profile(user):
-    search_form = SearchForm()
     user = mongo.db.users.find_one_or_404(
         {'email': user})
     recipes = list(mongo.db.recipes.find({
         'added_by': user['email']
     }))
+    search_form = SearchForm()
     return render_template('profile.html', user=user, recipes=recipes, search_form=search_form)
 
 
@@ -329,4 +337,4 @@ def error500(e):
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=int(os.environ.get('PORT')),
-            debug=True)
+            debug=False)
