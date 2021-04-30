@@ -17,9 +17,9 @@
 
     {% for recipe in recipes %}
     <div class="col-12 col-lg-6 mb-4">
-      <div class="card shadow-2-strong p-1 recipe-card">
+      <div class="card shadow-2-strong p-3 recipe-card">
         <a class="recipe-card-link" href="{{ url_for('display_recipe', recipe_id=recipe._id) }}">
-          <h5 class="card-title text-center">{{ recipe.name }}</h5>
+          <h5 class="card-title text-center text-decoration-underline">{{ recipe.name }}</h5>
         </a>
         <div class="row">
           <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">

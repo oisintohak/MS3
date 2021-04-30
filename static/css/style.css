@@ -178,7 +178,7 @@ body {
 }
 
 .recipe-card-link img, .recipe-card-link {
-    transition: all .25s linear;
+    transition: all .15s linear;
 }
 
 .recipe-card-link img:active, .recipe-card-link img:hover {

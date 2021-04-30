@@ -36,7 +36,7 @@
             <!-- Search form -->
             <form method="POST" action="{{ url_for('search') }}" class="d-flex w-auto my-auto">
               <div class="form-outline">
-                <input type="search" id="search" name="search" class="form-control" />
+                <input type="search" id="search" name="search" class="form-control" required min="2" max="30" />
                 <label class="form-label" for="search">Search</label>
               </div>
               <button type="submit" class="btn btn-outline-dark text-primary-color accent-color"
