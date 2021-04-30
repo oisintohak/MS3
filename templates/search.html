@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+{% block title %}Search Results - We Cook{% endblock %}
+{% block content %}
+<div class="nav-padding">
+  {{ render_flashed_messages() }}
+</div>
+<div class="container">
+  <div class="row pt-4">
+    <div class="col">
+      <h5 class="text-center">Search Results:</h5>
+    </div>
+  </div>
+  <div class="row justify-content-center pt-4">
+    {% if recipes|length == 0 %}
+      <small class="text-center">No recipes found.</small>
+    {% endif %}
+
+    {% for recipe in recipes %}
+    <div class="col-12 col-lg-6 mb-4">
+      <div class="card shadow-2-strong p-1 recipe-card">
+        <a class="recipe-card-link" href="#">
+          <h5 class="card-title text-center">{{ recipe.name }}</h5>
+        </a>
+        <div class="row">
+          <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+            <a href="#" class="recipe-card-link">
+              {% if recipe.recipe_image_url %}
+              <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
+              {% else %}
+              <i class="recipe-card-image-placeholder fas fa-utensils"></i>
+              {% endif %}
+            </a>
+          </div>
+          <div class="col-12 col-md-6">
+            <div class="card-text">
+              <div class="accordion" id="recipe-accordion-{{ loop.index0 }}">
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="ingredients-heading-{{ loop.index0 }}">
+                    <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                      data-mdb-target="#ingredients-collapse-{{ loop.index0 }}" aria-expanded="false"
+                      aria-controls="ingredients-collapse-{{ loop.index0 }}">
+                      Ingredients:
+                    </button>
+                  </h2>
+                  <div id="ingredients-collapse-{{ loop.index0 }}" class="accordion-collapse collapse"
+                    aria-labelledby="ingredients-heading-{{ loop.index0 }}"
+                    data-mdb-parent="#recipe-accordion-{{ loop.index0 }}">
+                    <div class="accordion-body">
+                      <ul>
+                        {% for ingredient in recipe.ingredients %}
+                        <li>
+                          {{ ingredient.quantity }} {{ ingredient.ingredient }}
+                        </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item">
+                  <h2 class="accordion-header" id="instructions-heading-{{ loop.index0 }}">
+                    <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
+                      data-mdb-target="#instructions-collapse-{{ loop.index0 }}" aria-expanded="false"
+                      aria-controls="instructions-collapse-{{ loop.index0 }}">
+                      Instructions:
+                    </button>
+                  </h2>
+                  <div id="instructions-collapse-{{ loop.index0 }}" class="accordion-collapse collapse"
+                    aria-labelledby="instructions-heading-{{ loop.index0 }}"
+                    data-mdb-parent="#recipe-accordion-{{ loop.index0 }}">
+                    <div class="accordion-body">
+                      <p>
+                        {{ recipe.instructions }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <small>
+                <i class="fas fa-users"></i>Serves: {{ recipe.servings }}
+              </small> <br>
+              <small>
+                <i class="far fa-clock"></i>{{ recipe.time_required }} minutes
+              </small> <br>
+              <small>
+                <a class="recipe-card-link" href="{{ url_for('profile', user=recipe.added_by) }}">
+                  <i class="fas fa-user-circle"></i>Added by: {{ recipe.added_by_name }}
+                </a>
+              </small> <br> 
+              {% if session.user|lower == recipe.added_by|lower %}
+              <a class="btn btn-outline-dark accent-color text-primary-color"
+                href="{{ url_for('edit_recipe', recipe_id=recipe._id) }}" role="button">
+                Edit Recipe
+              </a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+
+  </div>
+</div>
+
+{% endblock %}

@@ -31,9 +31,9 @@
         </div>
         <div class="col-8 col-sm-4 d-flex justify-content-sm-center align-items-center">
           <!-- Search form -->
-          <form class="d-flex input-group w-auto my-auto">
-            <input type="search" class="form-control" placeholder="Type query" aria-label="Search" />
-            <button class="btn btn-outline-dark text-primary-color accent-color" type="button"
+          <form method="POST" action="{{ url_for('search') }}" class="d-flex input-group w-auto my-auto">
+            {{ render_field(search_form.search) }}
+            <button class="btn btn-outline-dark text-primary-color accent-color" type="submit"
               data-mdb-ripple-color="dark">
               <i class="fas fa-search"></i>
             </button>

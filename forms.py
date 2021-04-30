@@ -6,6 +6,12 @@ from wtforms.fields.html5 import EmailField
 
 image_extensions = {'png', 'jpg', 'jpeg'}
 
+
+class SearchForm(FlaskForm):
+    search = StringField('Search', validators=[validators.Length(
+        min=1, max=30, message='Search text must be between 1 and 30 characters.')])
+
+
 class LoginForm(FlaskForm):
     email = EmailField('Email', validators=[
         validators.InputRequired('Email is required')])

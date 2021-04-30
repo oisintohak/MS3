@@ -10,7 +10,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import RequestEntityTooLarge
 
-from forms import (LoginForm, RegistrationForm,
+from forms import (LoginForm, RegistrationForm, SearchForm,
                    EditProfileForm, IngredientForm, AddRecipeForm)
 
 if os.path.exists('env.py'):
@@ -34,11 +34,23 @@ mongo = PyMongo(app)
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html')
+    search_form = SearchForm()
+    return render_template('index.html', search_form=search_form)
+
+
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    search_form = SearchForm()
+
+    if request.method == 'POST':
+        query = search_form.search.data
+        recipes = list(mongo.db.recipes.find({'$text': {'$search': query}}))
+        return render_template('search.html', search_form=search_form, recipes=recipes)
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    search_form = SearchForm()
     form = RegistrationForm()
     if request.method == 'POST':
         # check if email has already been used
@@ -61,11 +73,12 @@ def register():
             flash('Registration Successful.')
             return redirect(url_for('profile', user=session['user']))
 
-    return render_template('register.html', form=form)
+    return render_template('register.html', form=form, search_form=search_form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    search_form = SearchForm()
     form = LoginForm()
     if request.method == 'POST':
         # check if email has been registered
@@ -89,7 +102,7 @@ def login():
             flash('Wrong email/password')
             return redirect(url_for('login'))
 
-    return render_template('login.html', form=form)
+    return render_template('login.html', form=form, search_form=search_form)
 
 
 @app.route('/logout')
@@ -101,16 +114,18 @@ def logout():
 
 @app.route('/profile/<user>')
 def profile(user):
+    search_form = SearchForm()
     user = mongo.db.users.find_one_or_404(
         {'email': user})
     recipes = list(mongo.db.recipes.find({
         'added_by': user['email']
     }))
-    return render_template('profile.html', user=user, recipes=recipes)
+    return render_template('profile.html', user=user, recipes=recipes, search_form=search_form)
 
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
+    search_form = SearchForm()
     user = mongo.db.users.find_one_or_404(
         {'email': session.get('user')})
     form = EditProfileForm(data=user)
@@ -148,7 +163,7 @@ def edit_profile():
             flash('Profile Updated')
             return redirect(url_for('profile', user=session['user']))
 
-    return render_template('edit_profile.html', user=user, form=form)
+    return render_template('edit_profile.html', user=user, form=form, search_form=search_form)
 
 
 @app.route('/delete_profile', methods=['GET', 'POST'])
@@ -174,6 +189,7 @@ def delete_profile():
 
 @app.route('/add_recipe', methods=['GET', 'POST'])
 def add_recipe():
+    search_form = SearchForm()
     if 'user' not in session:
         flash('You need to log in to add a recipe.')
         return redirect(url_for('login'))
@@ -203,11 +219,12 @@ def add_recipe():
             mongo.db.recipes.insert_one(new_recipe)
             return redirect(url_for('profile', user=session['user']))
 
-    return render_template('add_recipe.html', form=form)
+    return render_template('add_recipe.html', form=form, search_form=search_form)
 
 
 @app.route('/edit_recipe/<recipe_id>', methods=['GET', 'POST'])
 def edit_recipe(recipe_id):
+    search_form = SearchForm()
     if 'user' not in session:
         flash('You need to log in to edit a recipe.')
         return redirect(url_for('login'))
@@ -245,13 +262,12 @@ def edit_recipe(recipe_id):
                     image_ID = ObjectId(image['_id'])
                     GridFS(mongo.db).delete(image_ID)
 
-
             mongo.db.recipes.update_one(
                 {'_id': ObjectId(recipe_id)}, update_recipe)
             flash('Recipe Updated')
             return redirect(url_for('profile', user=session['user']))
 
-    return render_template('edit_recipe.html', recipe=recipe, form=form)
+    return render_template('edit_recipe.html', recipe=recipe, form=form, search_form=search_form)
 
 
 @app.route('/delete_recipe/<recipe_id>', methods=['GET', 'POST'])
