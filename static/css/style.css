@@ -163,6 +163,7 @@ body {
     width: 240px;
     max-height: 300px;
     object-fit: cover;
+    border-radius: 4px;
 }
 
 .recipe-card-image-placeholder {
