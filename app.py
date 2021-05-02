@@ -18,7 +18,7 @@ if os.path.exists('env.py'):
 
 app = Flask(__name__)
 
-# only allow files under 2MB to be uploaded
+# Only allow files under 2MB to be uploaded
 app.config['MAX_CONTENT_LENGTH'] = 2 * 1024 * 1024
 
 app.secret_key = os.environ.get('SECRET_KEY')
@@ -32,28 +32,50 @@ mongo = PyMongo(app)
 
 
 @app.route('/')
-@app.route('/index')
 def index():
+    """Render the home page template"""
+
     search_form = SearchForm()
     return render_template('index.html', search_form=search_form)
 
 
 @app.route('/search', methods=['GET', 'POST'])
 def search():
-    search_form = SearchForm()
+    """
+    Take a text query from the search_form and return any matching
+    results from the database.
+    """
 
+    search_form = SearchForm()
     if request.method == 'POST':
         query = search_form.search.data
         recipes = list(mongo.db.recipes.find({'$text': {'$search': query}}))
         return render_template('search.html', search_form=search_form, recipes=recipes)
 
 
+@app.route('/display_recipe/<recipe_id>')
+def display_recipe(recipe_id):
+    """
+    Retrieve the specified recipe from the database and render
+    the display_recipe template.
+    """
+
+    recipe = mongo.db.recipes.find_one_or_404({'_id': ObjectId(recipe_id)})
+    search_form = SearchForm()
+    return render_template('display_recipe.html', recipe=recipe, search_form=search_form)
+
+
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """
+    Render a registration form. After verifying that
+    the email has not been previously registered, add the
+    user to the session variable and redirect to the profile page.
+    """
+
     search_form = SearchForm()
     form = RegistrationForm()
     if request.method == 'POST':
-        # check if email has already been used
         email_used = mongo.db.users.find_one(
             {'email': (form.email.data).lower()})
         if email_used:
@@ -78,6 +100,12 @@ def register():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    """
+    Render a login form. After verifying that the email has been
+    registered and the password is correct, add the user to
+    the session variable and redirect to the profile page.
+    """
+
     search_form = SearchForm()
     form = LoginForm()
     if request.method == 'POST':
@@ -107,21 +135,25 @@ def login():
 
 @app.route('/logout')
 def logout():
-    session.pop('user')
-    flash('You have been logged out')
+    """
+    Remove the user from the session variable and redirect to
+    the home page.
+    """
+
+    if session.get('user'):
+        session.pop('user')
+        flash('You have been logged out')
+
     return redirect(url_for('index'))
-
-
-@app.route('/display_recipe/<recipe_id>')
-def display_recipe(recipe_id):
-    recipe = mongo.db.recipes.find_one_or_404({'_id': ObjectId(recipe_id)})
-    search_form = SearchForm()
-    return render_template('display_recipe.html', recipe=recipe, search_form=search_form)
-
 
 
 @app.route('/profile/<user>')
 def profile(user):
+    """
+    Retrieve the data for a user and their recipes from the
+    database and render the profile template.
+    """
+
     user = mongo.db.users.find_one_or_404(
         {'email': user})
     recipes = list(mongo.db.recipes.find({
@@ -133,18 +165,26 @@ def profile(user):
 
 @app.route('/edit_profile', methods=['GET', 'POST'])
 def edit_profile():
+    """
+    After verifying that a user is logged in, render a form to 
+    edit the user's profile. If an image is selected to upload,
+    save a reference to the old image for deletion from GridFS.
+    Update the relevant fields in the user document in mongoDB.
+    """
+
+    if 'user' not in session:
+        redirect(url_for('login'))
+
     search_form = SearchForm()
     user = mongo.db.users.find_one_or_404(
         {'email': session.get('user')})
     form = EditProfileForm(data=user)
     if request.method == 'POST':
         if form.validate_on_submit():
-            # use $set to only change the specified fields
             update_profile = {'$set': {
                 'name': form.name.data,
                 'description': form.description.data,
             }}
-
             if form.image.data:
                 try:
                     profile_picture = request.files['image']
@@ -155,11 +195,11 @@ def edit_profile():
                     update_profile['$set']['profile_picture_url'] = url_for(
                         'file', filename=secured_filename)
                 except RequestEntityTooLarge as e:
-                    flash('Image cannot exceed 2MB.')
+                    # Handle error for upload size limit.
+                    abort(413)
                     return redirect(url_for('index'))
 
             if user.get('profile_picture'):
-                # save reference to old image:
                 old_profile_picture = user['profile_picture']
                 image = mongo.db.fs.files.find_one(
                     {'filename': old_profile_picture})
@@ -176,6 +216,13 @@ def edit_profile():
 
 @app.route('/delete_profile', methods=['GET', 'POST'])
 def delete_profile():
+    """
+    After verifying that a user is logged in, save a reference
+    to any existing profile picture for deletion from gridFS and 
+    remove the user document from mongoDB. Render the home page
+    template.
+    """
+
     if not session.get('user'):
         flash('You need to log in to delete your profile.')
         return redirect(url_for('login'))
@@ -183,7 +230,6 @@ def delete_profile():
     user = mongo.db.users.find_one_or_404({'email': session.get('user')})
 
     if user.get('profile_picture'):
-        # save reference to old image:
         image_filename = user['profile_picture']
         image = mongo.db.fs.files.find_one({'filename': image_filename})
         image_ID = ObjectId(image['_id'])
@@ -197,6 +243,13 @@ def delete_profile():
 
 @app.route('/add_recipe', methods=['GET', 'POST'])
 def add_recipe():
+    """
+    After verifying that a user is logged in, render a form to
+    add a new recipe. When submitted, validate the user input and
+    any image upload. Secure the image filename and insert the
+    document into mongoDB.
+    """
+
     search_form = SearchForm()
     if 'user' not in session:
         flash('You need to log in to add a recipe.')
@@ -227,16 +280,24 @@ def add_recipe():
             mongo.db.recipes.insert_one(new_recipe)
             return redirect(url_for('profile', user=session['user']))
 
-    return render_template('add_recipe.html', form=form, search_form=search_form)
+    return render_template('add_recipe.html', form=form, 
+                           search_form=search_form)
 
 
 @app.route('/edit_recipe/<recipe_id>', methods=['GET', 'POST'])
 def edit_recipe(recipe_id):
-    search_form = SearchForm()
+    """
+    Verify that a user is logged in and they created the recipe.
+    Render a form to edit the recipe. Validate the user input when
+    submitted and any image upload. Secure the filename and update
+    the relevant fields in the mongoDB document.
+    """
+
     if 'user' not in session:
         flash('You need to log in to edit a recipe.')
         return redirect(url_for('login'))
 
+    search_form = SearchForm()
     recipe = mongo.db.recipes.find_one_or_404({'_id': ObjectId(recipe_id)})
 
     if recipe['added_by'] != session['user']:
@@ -280,17 +341,19 @@ def edit_recipe(recipe_id):
 
 @app.route('/delete_recipe/<recipe_id>', methods=['GET', 'POST'])
 def delete_recipe(recipe_id):
+    """
+    Verify that a user is logged in, they created the recipe and
+    the recipe exists. Delete any recipe image and remove the
+    document from mongoDB.
+    """
+    
     if not session.get('user'):
         flash('You need to log in to delete a recipe.')
         return redirect(url_for('login'))
 
-    recipe = mongo.db.recipes.find_one({'_id': ObjectId(recipe_id)})
+    recipe = mongo.db.recipes.find_one_or_404({'_id': ObjectId(recipe_id)})
     if recipe['added_by'] != session['user']:
         flash('You can only delete your own recipes.')
-        return redirect(url_for('profile', user=session['user']))
-
-    if not recipe:
-        flash('Recipe not found.')
         return redirect(url_for('profile', user=session['user']))
 
     if recipe.get('recipe_image'):
@@ -307,6 +370,7 @@ def delete_recipe(recipe_id):
 
 @app.route('/file/<filename>')
 def file(filename):
+    """Return the specified file from mongoDB GridFS"""
     return mongo.send_file(filename)
 
 
@@ -337,4 +401,4 @@ def error500(e):
 if __name__ == '__main__':
     app.run(host=os.environ.get('IP'),
             port=int(os.environ.get('PORT')),
-            debug=False)
+            debug=os.environ.get('DEBUGGING'))
