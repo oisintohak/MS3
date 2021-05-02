@@ -9,14 +9,17 @@
     <div class="col">
       <h5 class="text-center">
         {% if session.user|lower == user.email %}
+        <!-- Edit profile button -->
         <a class="recipe-card-link" href="{{ url_for('edit_profile') }}" role="button">
           <i class="fas fa-user-edit"></i>
         </a>
+        <!-- Users' name -->
         {% endif %}{{ user.name }}'s Profile
       </h5>
     </div>
   </div>
   <div class="row pt-2">
+    <!-- Profile picture -->
     <div class="col-6 d-flex justify-content-end">
       {% if user.profile_picture %}
       <img id="profile-picture" class="img-fluid" src="{{ user.profile_picture_url }}">
@@ -24,7 +27,8 @@
       <i id="profile-picture-placeholder" class="fas fa-user"></i>
       {% endif %}
     </div>
-    <div class="col-6">
+    <!-- User description -->
+    <div class="col-6 col-lg-4 user-description">
       {% if user.description %}
       <p>{{ user.description }}</p>
       {% else %}
@@ -40,6 +44,7 @@
     <div class="col-12 mb-4">
       <h5 class="text-center">{{ user.name }}'s Recipes</h5>
     </div>
+    <!-- Recipe Card -->
     {% for recipe in recipes %}
     <div class="col-12 col-lg-6 mb-4">
       <div class="card shadow-2-strong p-3 recipe-card">
@@ -57,8 +62,10 @@
               {% endif %}
             </a>
           </div>
+          <!-- Collapsible accordion -->
           <div class="col-12 col-md-6 d-flex flex-column justify-content-between">
             <div class="accordion" id="recipe-accordion-{{ loop.index0 }}">
+              <!-- Ingredients accordion -->
               <div class="accordion-item">
                 <h2 class="accordion-header" id="ingredients-heading-{{ loop.index0 }}">
                   <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
@@ -81,6 +88,7 @@
                   </div>
                 </div>
               </div>
+              <!-- Instructions accordion -->
               <div class="accordion-item">
                 <h2 class="accordion-header" id="instructions-heading-{{ loop.index0 }}">
                   <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
@@ -102,6 +110,7 @@
             </div>
             <div>
               <div class="mt-2">
+                <!-- Recipe details -->
                 <i class="fas fa-users pe-1"></i>Serves: {{ recipe.servings }}
               </div>
               <div class="mt-2">

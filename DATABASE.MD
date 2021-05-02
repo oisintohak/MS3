@@ -1,6 +1,6 @@
 ## Database Schema
 
-The database will contain 3 collections: Users, Recipes and Offers.
+The database will contain 2 collections: Users and Recipes.
 
 ---
 
@@ -56,21 +56,5 @@ The database will contain 3 collections: Users, Recipes and Offers.
   "instructions": <string>,
   "picture":      <ObjectID>
 
-}
-```
-
----
-
-### Offers collection:
-
-##### Schema
-
-```yaml
-{
-  "_id":          <ObjectID>,
-  "user_id":      <ObjectID>,
-  "recipe_id":    <ObjectID>,
-  "picture":      <ObjectID>,
-  "location":     <string>,
 }
 ```

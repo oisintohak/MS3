@@ -52,20 +52,22 @@
           {% endfor %}
         </ul>
         {% endif %}
+        <!-- container for file size/extension error -->
         <div class="dark-red-color fw-bold text-uppercase" id="filesize-validation"></div>
         <div class="col-12">
           <!-- Add Recipe Button -->
-          <button id="submit-button" type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Save Recipe</button>
+          <button id="submit-button" type="submit"
+            class="btn btn-outline-dark accent-color primary-text-color my-2">Save Recipe</button>
         </div>
         <div class="col-12">
           <!-- Cancel Button -->
           <a class="btn btn-sm btn-outline-dark grey-background text-primary-color my-2"
-          href="{{ url_for('profile', user=session['user']) }}" role="button">
-          Cancel
-        </a>
-      </div>
+            href="{{ url_for('profile', user=session['user']) }}" role="button">
+            Cancel
+          </a>
+        </div>
       </form>
-      <!--  Form template used to create new  ingredient forms  -->
+      <!--  Form template used to create new ingredient forms  -->
       <div id="ingredients-_-form" class="is-hidden row g-2 mb-3" data-index="_">
         <div class="col-5 m-0 d-flex justify-content-center align-items-center">
           <div class="form-outline">
@@ -97,8 +99,4 @@
     </div>
   </div>
 </div>
-{% endblock %}
-
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/validateFileSize.js') }}"></script>
 {% endblock %}

@@ -79,9 +79,9 @@ class EditProfileForm(FlaskForm):
         validators=[
             validators.InputRequired('Enter a description.'),
             validators.length(
-                min=10, max=2000,
+                min=10, max=280,
                 message=('Description must be between 10 and '
-                         '2000 characters.')
+                         '280 characters.')
             )
         ]
     )

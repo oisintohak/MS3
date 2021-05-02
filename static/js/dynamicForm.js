@@ -2,7 +2,8 @@
 This code allows the user to add and remove ingredients from the form,
 without having to send a request to the server. 
 It adds the correct ID to each element to be recognised by flask-wtf and adjusts the 
-indices of elements as the user adds/removes ingredients
+indices of elements as the user adds/removes ingredients. The new ingredient form is created by cloning
+a hidden form an replacing the placeholder (an underscore) with the correct index.
 The code was taken from Rafael Medina and can be found on his blog: https://www.rmedgar.com/blog/dynamic-fields-flask-wtf/
 */
 const ID_RE = /(-)_(-)/;

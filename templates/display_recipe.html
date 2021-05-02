@@ -8,16 +8,19 @@
   <div class="row justify-content-center pt-5">
     <div class="col-12 col-lg-8 mb-4">
       <div class="card shadow-2-strong px-5 py-3 recipe-card">
-          <h5 class="card-title text-center">{{ recipe.name }}</h5>
+        <!-- Recipe Title -->
+        <h5 class="card-title text-center">{{ recipe.name }}</h5>
         <div class="row">
           <div class="col-12 col-md-6 pt-3 text-center">
-              {% if recipe.recipe_image_url %}
-              <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
-              {% else %}
-              <i class="recipe-card-image-placeholder fas fa-utensils"></i>
-              {% endif %}
+            <!-- Recipe Image -->
+            {% if recipe.recipe_image_url %}
+            <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
+            {% else %}
+            <i class="recipe-card-image-placeholder fas fa-utensils"></i>
+            {% endif %}
           </div>
           <div class="col-12 col-md-6 pt-3">
+            <!-- Recipe Ingredients -->
             <h6 class="text-decoration-underline">Ingredients</h6>
             <ul>
               {% for ingredient in recipe.ingredients %}
@@ -26,38 +29,37 @@
               </li>
               {% endfor %}
             </ul>
-
           </div>
           <div class="col-12 pt-3">
+            <!-- Recipe Instructions -->
             <h6 class="text-decoration-underline">Instructions</h6>
             <p>{{ recipe.instructions }}</p>
           </div>
           <div>
+            <!-- Recipe Details -->
             <div class="mt-2">
               <i class="fas fa-users pe-1"></i>Serves: {{ recipe.servings }}
             </div>
             <div class="mt-2">
               <i class="far fa-clock pe-1"></i>{{ recipe.time_required }} minutes
             </div>
-          <div class="d-flex justify-content-between align-items-center mt-2">
-            <small>
-              <a class="recipe-card-link" href="{{ url_for('profile', user=recipe.added_by) }}">
-                <i class="fas fa-user-circle pe-1"></i>Added by: {{ recipe.added_by_name }}
+            <div class="d-flex justify-content-between align-items-center mt-2">
+              <small>
+                <a class="recipe-card-link" href="{{ url_for('profile', user=recipe.added_by) }}">
+                  <i class="fas fa-user-circle pe-1"></i>Added by: {{ recipe.added_by_name }}
+                </a>
+                {% if session.user|lower == recipe.added_by|lower %}
+              </small>
+              <a class="btn btn-sm ms-auto btn-outline-dark accent-color text-primary-color"
+                href="{{ url_for('edit_recipe', recipe_id=recipe._id) }}" role="button">
+                Edit Recipe
               </a>
-              {% if session.user|lower == recipe.added_by|lower %}
-            </small>
-            <a class="btn btn-sm ms-auto btn-outline-dark accent-color text-primary-color"
-              href="{{ url_for('edit_recipe', recipe_id=recipe._id) }}" role="button">
-              Edit Recipe
-            </a>
-            {% endif %}
+              {% endif %}
+            </div>
           </div>
-        </div>
         </div>
       </div>
     </div>
-
   </div>
 </div>
-
 {% endblock %}

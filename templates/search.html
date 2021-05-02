@@ -14,16 +14,18 @@
     {% if recipes|length == 0 %}
     <small class="text-center">No recipes found.</small>
     {% endif %}
-
     {% for recipe in recipes %}
+    <!-- Recipe card -->
     <div class="col-12 col-lg-6 mb-4">
       <div class="card shadow-2-strong p-3 recipe-card">
         <a class="recipe-card-link text-decoration-underline"
           href="{{ url_for('display_recipe', recipe_id=recipe._id) }}">
+          <!-- Recipe title -->
           <h5 class="card-title text-center pb-2">{{ recipe.name }}</h5>
         </a>
         <div class="row">
           <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
+            <!-- Recipe Image -->
             <a href="{{ url_for('display_recipe', recipe_id=recipe._id) }}" class="recipe-card-link">
               {% if recipe.recipe_image_url %}
               <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
@@ -32,8 +34,10 @@
               {% endif %}
             </a>
           </div>
+          <!-- Collapsible accordion -->
           <div class="col-12 col-md-6 d-flex flex-column justify-content-between">
             <div class="accordion" id="recipe-accordion-{{ loop.index0 }}">
+              <!-- Ingredients accordion -->
               <div class="accordion-item">
                 <h2 class="accordion-header" id="ingredients-heading-{{ loop.index0 }}">
                   <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
@@ -56,6 +60,7 @@
                   </div>
                 </div>
               </div>
+              <!-- Instructions accordion -->
               <div class="accordion-item">
                 <h2 class="accordion-header" id="instructions-heading-{{ loop.index0 }}">
                   <button class="accordion-button collapsed" type="button" data-mdb-toggle="collapse"
@@ -76,6 +81,7 @@
               </div>
             </div>
             <div>
+              <!-- Recipe details -->
               <div class="mt-2">
                 <i class="fas fa-users pe-1"></i>Serves: {{ recipe.servings }}
               </div>

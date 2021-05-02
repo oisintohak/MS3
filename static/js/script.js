@@ -1,5 +1,4 @@
 // flash message popup/close
-
 const closeFlashedMessages = document.querySelector('#close-flashed-messages');
 const flashedMessages = document.querySelector('#flashed-messages');
 if (flashedMessages != null) {
@@ -8,7 +7,7 @@ if (flashedMessages != null) {
   });
 }
 
-// file validation:
+// file size and extension validation
 const fileUpload = document.querySelector('#image');
 if (fileUpload != null) {
   fileUpload.addEventListener('change', (event) => {

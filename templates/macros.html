@@ -1,3 +1,4 @@
+{# macro to render an input field with mdb classes #}
 {% macro render_field(field) %}
 <div class="form-outline">
   {{ field(class_='form-control')|safe }}
@@ -12,6 +13,7 @@
 </div>
 {% endmacro %}
 
+{# macro to render quantity and ingredient inputs #}
 <!-- this macro is used to render a set of 2 inputs: quantity and ingredient -->
 {% macro render_ingredient_form(subform, index) %}
 {% from "macros.html" import render_field %}
@@ -27,6 +29,7 @@
 </div>
 {% endmacro %}
 
+{# macro to render flashed messages #}
 {% macro render_flashed_messages() %}
 <!-- Flashed messages -->
 {% with messages = get_flashed_messages() %}

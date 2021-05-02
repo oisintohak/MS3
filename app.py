@@ -318,7 +318,7 @@ def edit_recipe(recipe_id):
     the relevant fields in the mongoDB document.
     """
 
-    if 'user' not in session:
+    if not session.get('user'):
         flash('You need to log in to edit a recipe.')
         return redirect(url_for('login'))
 

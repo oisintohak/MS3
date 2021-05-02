@@ -1,4 +1,7 @@
 {% from "macros.html" import render_field, render_ingredient_form, render_flashed_messages %}
+<!-- To achieve a home page with a fullscreen background image
+   and no vertical scroll, the index page does not extend the base template -->
+
 <html lang="en">
 
 <head>
@@ -10,8 +13,7 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
   <!-- MDB -->
-  <!-- <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css" rel="stylesheet" /> -->
-  <link rel='stylesheet' href="{{ url_for('static', filename='css/mdb.min.css') }}" type='text/css' />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.css" rel="stylesheet" />
   <link rel='stylesheet' href="{{ url_for('static', filename='css/style.css') }}" type='text/css' />
   <link rel="icon" href="{{ url_for('static', filename='images/utensils-solid.svg') }}" type="image/x-icon">
   <!-- Icon taken from fontawesome.com, see https://fontawesome.com/license for license details -->
@@ -37,7 +39,7 @@
             <form method="POST" action="{{ url_for('search') }}" class="d-flex w-auto my-auto">
               <div class="form-outline">
                 <input type="search" id="search" name="search" class="form-control" required min="2" max="30" />
-                <label class="form-label" for="search">Search</label>
+                <label class="form-label" for="search">Search for recipes</label>
               </div>
               <button type="submit" class="btn btn-outline-dark text-primary-color accent-color"
                 data-mdb-ripple-color="dark">
@@ -56,18 +58,25 @@
                 <!-- Dropdown menu -->
                 <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                   {% if session.user %}
-                  <li><a class="dropdown-item" href="{{ url_for('profile', user=session['user']) }}">Your Profile</a>
-                  </li>
+                  <li><a class="dropdown-item" href="{{ url_for('add_recipe') }}">Add Recipe</a></li>
                   <li>
                     <hr class="dropdown-divider" />
                   </li>
-                  <li><a class="dropdown-item" href="{{ url_for('add_recipe') }}">Add Recipe</a></li>
+                  <li><a class="dropdown-item" href="{{ url_for('edit_profile') }}">Edit Profile</a></li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
+                  <li><a class="dropdown-item" href="{{ url_for('profile', user=session['user']) }}">Your Profile</a>
+                  </li>
                   <li>
                     <hr class="dropdown-divider" />
                   </li>
                   <li><a class="dropdown-item" href="{{ url_for('logout') }}">Log Out</a></li>
                   {% else %}
                   <li><a class="dropdown-item" href="{{ url_for('login') }}">Log In</a></li>
+                  <li>
+                    <hr class="dropdown-divider" />
+                  </li>
                   <li><a class="dropdown-item" href="{{ url_for('register') }}">Register</a></li>
                   {% endif %}
                 </ul>
@@ -85,7 +94,7 @@
       <div id="mask" class="text-white d-flex flex-column justify-content-around align-items-center mx-3 px-3 py-3">
         <h1>Welcome to We Cook</h1>
         <h4>Let's cook together!</h4>
-        <p>Sign up now to start adding recipes, offer to cook for people or see who else is cooking.</p>
+        <p>Sign up now to start adding recipes.</p>
         <a class="btn btn-outline-dark accent-color text-primary-color btn-lg" href="{{ url_for('register') }}"
           role="button">SIGN ME UP!</a>
       </div>
@@ -100,7 +109,6 @@
   <!-- SCRIPT TO ALLOW DYNAMIC FORMS FOR WTFORMS -->
   <script src="{{ url_for('static', filename='js/dynamicForm.js') }}"></script>
   <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
-  <!-- <script type="text/javascript" src="static/js/mdb.min.js"></script> -->
 </body>
 
 </html>

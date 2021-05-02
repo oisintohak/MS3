@@ -1,5 +1,7 @@
 # We Cook - Recipe and community cooking website
-This is a website where users can upload and share recipes and offer to cook recipes. Users can find other users based on location and accept or offer to cook recipes.
+This is a website where users can add recipes or search for recipes other users have added.
+
+[Link to live project](https://we-cook-recipe-sharing.herokuapp.com/)
 
 ---
 
@@ -9,95 +11,17 @@ This is a website where users can upload and share recipes and offer to cook rec
  - Visitors want to register for the website.
  - Users want to easily add their own recipes.
  - Users want to find others' recipes.
- - Users want to offer to cook for others and share their location.
- - Users want to search for and accept other users offers to cook.
- - Users want to be able to contact an admin with any issues.
- - Admins want to be able to remove any innapropriate content or users.
-
-
 
 ---
 
 ###### Wireframes:
 __Home Page__ ![Home_page](wireframes/HOME.png)
-__Offers Page__ ![Offers_page](wireframes/OFFERS.png)
 __Profile Page__ ![Profile_page](wireframes/PROFILE.png)
 __Search Page__ ![Search_page](wireframes/SEARCH.png)
 
 
-## Database Schema
+## Database Planning:
 
-The database will contain 3 collections: Users, Recipes and Offers.
+The database will contain 2 collections: Users and Recipes.
 
----
-
-### Users collection:
-
-##### Schema
-
-```yaml
-{
-  "_id":          <ObjectID>,
-  "name":         <string>,
-  "email":        <string>,
-  "password":     <string>,
-  "address":      <string>  
-}
-```
-
-##### Example
-
-```yaml
-{
-  "_id":          <ObjectID>,
-  "name":         "John Doe",
-  "email":        "john@doe.com",
-  "password":     "thisismypassword",
-  "address":      "123 The Street, City, Country"  
-}
-```
-
----
-
-### Recipes collection:
-
-##### Schema
-
-```yaml
-{
-  "_id":          <ObjectID>,
-  "name":         <string>,
-  "ingredients":  <string>,
-  "instructions": <string>,
-  "picture":      <ObjectID>
-}
-```
-
-##### Example
-
-```yaml
-{
-  "_id":          <ObjectID>,
-  "name":         "Chocolate Cake",
-  "ingredients":  "Milk, Flour Eggs,
-  "instructions": <string>,
-  "picture":      <ObjectID>
-
-}
-```
-
----
-
-### Offers collection:
-
-##### Schema
-
-```yaml
-{
-  "_id":          <ObjectID>,
-  "user_id":      <ObjectID>,
-  "recipe_id":    <ObjectID>,
-  "picture":      <ObjectID>,
-  "location":     <string>,
-}
-```
+[Link to database schema](DATABASE.MD)
