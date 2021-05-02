@@ -53,13 +53,17 @@
         </ul>
         {% endif %}
         <div class="dark-red-color fw-bold text-uppercase" id="filesize-validation"></div>
-        <!-- Add Recipe Button -->
-        <button id="submit-button" type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Add Recipe</button>
-        <!-- Cancel Button -->
-        <a class="btn btn-sm btn-outline-dark grey-background text-primary-color my-2"
-        href="{{ url_for('profile', user=session['user']) }}" role="button">
-        Cancel
+        <div class="col-12">
+          <!-- Add Recipe Button -->
+          <button id="submit-button" type="submit" class="btn btn-outline-dark accent-color primary-text-color my-2">Save Recipe</button>
+        </div>
+        <div class="col-12">
+          <!-- Cancel Button -->
+          <a class="btn btn-sm btn-outline-dark grey-background text-primary-color my-2"
+          href="{{ url_for('profile', user=session['user']) }}" role="button">
+          Cancel
         </a>
+      </div>
       </form>
       <!--  Form template used to create new  ingredient forms  -->
       <div id="ingredients-_-form" class="is-hidden row g-2 mb-3" data-index="_">
