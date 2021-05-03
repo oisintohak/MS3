@@ -12,16 +12,62 @@ This is a website where users can add recipes or search for recipes other users 
  - Users want to easily add their own recipes.
  - Users want to find others' recipes.
 
----
+### Features:
+- Responsive and user friendly interface.
+- Easy navigation menu.
+- Intuitive search feature.
+- Simple and intuitive forms.
+- Informative form validation feedback.
+- Users can easily add or edit recipes.
+- Users can edit their profile.
 
+### Structure:
+ - All pages will have a top navigation bar.
+ - Main content will be centered horizontally and vertically.
+ - Search results will be displayed in a grid of recipe cards.
+ - Profile pages will feature that users' recipes.
+ - Dedicated page for each recipe to allow bookmarking of recipes.
+
+
+### Skeleton:
 ###### Wireframes:
 __Home Page__ ![Home_page](wireframes/HOME.png)
 __Profile Page__ ![Profile_page](wireframes/PROFILE.png)
 __Search Page__ ![Search_page](wireframes/SEARCH.png)
 
+### Surface:
+ - I chose a simple color pallete featuring tones that resemble natural food colors.
+ - I used intuitive colors for call to action buttons and form buttons.
+ - I used the Material Design Bootstrap CSS framework which includes Roboto as a default font and implements material design button effects. This helps to make the site intuitive and user friendly.
 
-## Database Planning:
+
+### Database Planning:
 
 The database will contain 2 collections: Users and Recipes.
 
 [Link to database schema](DATABASE.MD)
+
+### Existing Features: 
+ - 
+
+
+### Features to implement:
+ - Email verification
+ - cook sharing feature:
+   - users can offer to cook or accept other users' offers.
+   - offers are based on location and users can view them on a map.
+ - recipe favourites:
+   - users can save recipes to their favourites collection
+   - users can view other users' favourites.
+
+### Technologies Used:
+- HTML
+- CSS
+- Javascript
+- Python (Flask)
+- WTForms/Flask-WTforms for server-side form validation
+- MDBootstrap
+
+### Issues:
+ - ##### 413 error handling:
+  - When a user uploads a file that is larger than the limit set in flask (MAX_CONTENT_LENGTH), the connection is aborted before the error is handled properly. The browser displays

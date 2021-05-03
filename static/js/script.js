@@ -10,7 +10,7 @@ if (flashedMessages != null) {
 // file size and extension validation
 const fileUpload = document.querySelector('#image');
 if (fileUpload != null) {
-  fileUpload.addEventListener('change', (event) => {
+  fileUpload.addEventListener('change', function validate (event) {
     const files = event.target.files;
     const display = document.querySelector('#filesize-validation');
     const submit = document.querySelector('#submit-button');
