@@ -1,7 +1,7 @@
 {% from "macros.html" import render_field, render_ingredient_form, render_flashed_messages %}
 <!-- To achieve a home page with a fullscreen background image
    and no vertical scroll, the index page does not extend the base template -->
-
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -38,7 +38,8 @@
             <!-- Search form -->
             <form method="POST" action="{{ url_for('search') }}" class="d-flex w-auto my-auto">
               <div class="form-outline">
-                <input type="search" id="search" name="search" class="form-control" required minlength="2" maxlength="30" />
+                <input type="search" id="search" name="search" class="form-control" required minlength="2"
+                  maxlength="30" />
                 <label class="form-label" for="search">Search for recipes</label>
               </div>
               <button type="submit" class="btn btn-outline-dark text-primary-color accent-color"
@@ -101,7 +102,7 @@
     </header>
   </main>
   <!-- MDB -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/3.3.0/mdb.min.js"></script>
   <!-- JQUERY -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="

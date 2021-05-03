@@ -46,8 +46,6 @@ __Search Page__ ![Search_page](wireframes/SEARCH.png)
 The database will contain 2 collections: Users and Recipes.
 
 [Link to database schema](DATABASE.MD)
-
-### Existing Features: 
  - 
 
 
@@ -60,13 +58,27 @@ The database will contain 2 collections: Users and Recipes.
    - users can save recipes to their favourites collection
    - users can view other users' favourites.
 
+### Testing
+
+Details of testing can be found [here](TESTING.MD)
+
 ### Technologies Used:
+
+#### Languages
+
 - HTML
 - CSS
 - Javascript
-- Python (Flask)
-- WTForms/Flask-WTforms for server-side form validation
-- MDBootstrap
+- Python
+
+#### Libraries, Frameworks etc.
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework was used to build the web application
+- [Flask-PyMongo]() was used to access MongoDB from flask.
+- [Werkzeug]() was used to hash passwords and secure filenames
+- [WTForms](https://wtforms.readthedocs.io/en/2.3.x/) and [Flask-WTforms](https://flask-wtf.readthedocs.io/en/stable/) were used for server-side form validation
+- [GridFS]()
+- [MDBootstrap](https://mdbootstrap.com/) for styling, layout and typography
+- MongoDB
 
 ### Issues:
  - ##### Dynamic number of input fields and WTForms validation:
@@ -74,3 +86,35 @@ The database will contain 2 collections: Users and Recipes.
  - ##### 413 error handling:
   - When a user uploads a file that is larger than the limit set in flask (MAX_CONTENT_LENGTH), the connection is aborted before the error is handled properly. The browser displays a default "ERR_CONNECTION_ABORTED" message. This is the case with a local werkzeug development server, with debug on or off and also when deployed to heroku using gunicorn in production mode.
   - Solution: I couldn't find a way to get the server to handle the 413 and redirect instead of showing the default browser error page so I decided to validate the file size and extension in Javascript. I added an event listener to the file input which would display an error and disable the form submit button if the user selected a file over 2MB or a file that didn't have a .jpg, .jpeg or .png extension.
+
+
+### Deployment
+
+This project was deployed to Heroku with the following steps:
+
+1. Ensure your app has debug mode set to False when deploying.
+2. Add a file called `Procfile` with no extension to your project directory and add `web: python app.py`
+3. Heroku can install dependencies from a requirements.txt or a Pipfile
+   - To create a requirements.txt run `pip freeze > requirements.txt`
+   - To create a Pipfile run `pip install pipenv`, `pipenv install`
+4. Create an account on Heroku and create a new app.
+5. In your app dashboard, in the deploy section, select 'Connect to GitHub'
+6. Select the GitHub repository that contains your project.
+7. Select Automatic deploys and choose your desired branch.
+8. Go to the app settings on Heroku and click 'Reveal Config Vars'
+9. Add the required keys as they are in your local env.py (i.e IP, PORT, SECRET_KEY, MONGO_URI, MONGO_DBNAME)
+10. Go to the app Overview page and when the build is finished, click 'Open App'
+
+### Credits
+
+#### Images
+ - The home page background, recipe images and profile pictures were all taken from [Unsplash](https://unsplash.com/)
+
+#### Code
+ - The code in dynamicForm.js which allows users to add/remove inputs and validate them with WTForms was taken from [this guide](https://www.rmedgar.com/blog/dynamic-fields-flask-wtf/)
+ - I followed [this tutorial series](https://www.youtube.com/watch?v=vzaXBm-ZVOQ) to learn how to use Flask-WTF and WTForms
+ - I followed [this tutorial](https://www.youtube.com/watch?v=DsgAuceHha4) to learn how to save and retrieve files with Flask and MongoDB
+
+
+### Acknowledgements
+ - I received great advice and feedback from my mentor Brian Macharia and from the Code Institute Slack community.
