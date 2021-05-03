@@ -22,7 +22,7 @@
     <!-- Profile picture -->
     <div class="col-6 d-flex justify-content-end">
       {% if user.profile_picture %}
-      <img id="profile-picture" class="img-fluid" src="{{ user.profile_picture_url }}">
+      <img id="profile-picture" class="img-fluid" alt="profile picture" src="{{ user.profile_picture_url }}">
       {% else %}
       <i id="profile-picture-placeholder" class="fas fa-user"></i>
       {% endif %}
@@ -56,7 +56,7 @@
           <div class="col-12 col-md-6 d-flex justify-content-center align-items-center">
             <a href="{{ url_for('display_recipe', recipe_id=recipe._id) }}" class="recipe-card-link">
               {% if recipe.recipe_image_url %}
-              <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
+              <img src="{{ recipe.recipe_image_url }}" alt="recipe image" class="recipe-card-image" />
               {% else %}
               <i class="recipe-card-image-placeholder fas fa-utensils"></i>
               {% endif %}

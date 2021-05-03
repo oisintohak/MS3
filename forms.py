@@ -36,8 +36,8 @@ class LoginForm(FlaskForm):
             )
         ],
         render_kw={
-            "minlength":3,
-            "maxlength":80
+            "minlength": 3,
+            "maxlength": 80
         }
     )
     password = PasswordField(
@@ -50,8 +50,8 @@ class LoginForm(FlaskForm):
             )
         ],
         render_kw={
-            "minlength":3,
-            "maxlength":30
+            "minlength": 3,
+            "maxlength": 30
         }
     )
 
@@ -71,8 +71,8 @@ class RegistrationForm(LoginForm):
             )
         ],
         render_kw={
-            "minlength":2,
-            "maxlength":50
+            "minlength": 2,
+            "maxlength": 50
         }
     )
 
@@ -92,8 +92,8 @@ class EditProfileForm(FlaskForm):
             )
         ],
         render_kw={
-            "minlength":3,
-            "maxlength":50
+            "minlength": 3,
+            "maxlength": 50
         }
     )
     description = TextAreaField(
@@ -107,8 +107,8 @@ class EditProfileForm(FlaskForm):
             )
         ],
         render_kw={
-            "minlength":10,
-            "maxlength":280
+            "minlength": 10,
+            "maxlength": 280
         }
     )
     image = FileField(
@@ -137,8 +137,8 @@ class IngredientForm(Form):
             )
         ],
         render_kw={
-            "minlength":1,
-            "maxlength":30
+            "minlength": 1,
+            "maxlength": 30
         }
     )
     ingredient = StringField(
@@ -151,8 +151,8 @@ class IngredientForm(Form):
             )
         ],
         render_kw={
-            "minlength":1,
-            "maxlength":40
+            "minlength": 1,
+            "maxlength": 40
         }
     )
 
@@ -173,8 +173,8 @@ class AddRecipeForm(FlaskForm):
             )
         ],
         render_kw={
-            "minlength":3,
-            "maxlength":50
+            "minlength": 3,
+            "maxlength": 50
         }
     )
     ingredients = FieldList(
@@ -192,8 +192,8 @@ class AddRecipeForm(FlaskForm):
             )
         ],
         render_kw={
-            "minlength":10,
-            "maxlength":2000
+            "minlength": 10,
+            "maxlength": 2000
         }
     )
     servings = IntegerField(
@@ -206,8 +206,9 @@ class AddRecipeForm(FlaskForm):
             )
         ],
         render_kw={
-            "min":1,
-            "max":100
+            "min": 1,
+            "max": 100,
+            "type": "number"
         }
     )
     time_required = IntegerField(
@@ -222,8 +223,9 @@ class AddRecipeForm(FlaskForm):
             )
         ],
         render_kw={
-            "min":1,
-            "max":1000
+            "min": 1,
+            "max": 1000,
+            "type": "number"
         }
     )
     image = FileField(

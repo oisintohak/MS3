@@ -28,7 +28,7 @@
             <!-- Recipe Image -->
             <a href="{{ url_for('display_recipe', recipe_id=recipe._id) }}" class="recipe-card-link">
               {% if recipe.recipe_image_url %}
-              <img src="{{ recipe.recipe_image_url }}" class="recipe-card-image" />
+              <img src="{{ recipe.recipe_image_url }}" alt="recipe image" class="recipe-card-image" />
               {% else %}
               <i class="recipe-card-image-placeholder fas fa-utensils"></i>
               {% endif %}

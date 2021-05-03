@@ -44,19 +44,23 @@
           </div>
         </div>
         <div class="dark-red-color fw-bold text-uppercase" id="filesize-validation"></div>
-        <!-- Save Button -->
-        <button id="submit-button" type="submit"
-          class="btn btn-outline-dark accent-color primary-text-color my-2">Save</button>
-        <!-- Cancel Button -->
-        <a class="btn btn-outline-dark grey-background text-primary-color my-2"
-          href="{{ url_for('profile', user=session['user']) }}" role="button">
-          Cancel
-        </a>
-        <!-- Delete Profile Button -->
-        <button class="btn btn-sm btn-outline-dark dark-red-background text-primary-color my-2" type="button"
-          data-mdb-toggle="modal" data-mdb-target="#delete-modal" role="button">
-          Delete Profile
-        </button>
+        <div class="col-12">
+          <!-- Add Recipe Button -->
+          <button id="submit-button" type="submit"
+            class="btn btn-outline-dark accent-color primary-text-color my-2">Save</button>
+        </div>
+        <div class="col-12">
+          <!-- Cancel Button -->
+          <a class="btn btn-sm btn-outline-dark grey-background text-primary-color my-2"
+            href="{{ url_for('profile', user=session['user']) }}" role="button">
+            Cancel
+          </a>
+          <!-- Delete Recipe Button -->
+          <button class="btn btn-sm btn-outline-dark dark-red-background text-primary-color my-2" type="button"
+            data-mdb-toggle="modal" data-mdb-target="#delete-modal">
+            Delete Profile
+          </button>
+        </div>
       </form>
       <!-- Delete Recipe modal -->
       <div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="delete-modal-label" aria-hidden="true">

@@ -110,6 +110,10 @@ body {
     font-size: 1.6em;
 }
 
+.form-outline #search {
+    background-color: var(--light-primary-background);
+}
+
 .dropdown-menu, .dropdown-item {
     background-color: var(--light-primary-color);
 }
@@ -189,11 +193,12 @@ body {
 
 .recipe-card {
     background-color: var(--light-primary-color);
+    min-height: 372px;
 }
 
 .recipe-card-image {
     width: 240px;
-    max-height: 300px;
+    height: 300px;
     object-fit: cover;
     border-radius: 4px;
 }

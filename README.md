@@ -57,6 +57,7 @@ The database will contain 2 collections: Users and Recipes.
  - recipe favourites:
    - users can save recipes to their favourites collection
    - users can view other users' favourites.
+ - add pagination if there are more than 10 recipes in search results or on a profile page
 
 ### Testing
 
@@ -72,13 +73,14 @@ Details of testing can be found [here](TESTING.MD)
 - Python
 
 #### Libraries, Frameworks etc.
-- [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework was used to build the web application
-- [Flask-PyMongo]() was used to access MongoDB from flask.
-- [Werkzeug]() was used to hash passwords and secure filenames
-- [WTForms](https://wtforms.readthedocs.io/en/2.3.x/) and [Flask-WTforms](https://flask-wtf.readthedocs.io/en/stable/) were used for server-side form validation
-- [GridFS]()
-- [MDBootstrap](https://mdbootstrap.com/) for styling, layout and typography
-- MongoDB
+- [Flask](https://flask.palletsprojects.com/en/1.1.x/) framework was used to build the web application.
+- [MongoDB](https://www.mongodb.com/) was used for the database.
+- [Flask-PyMongo](https://flask-pymongo.readthedocs.io/en/latest/) was used to access MongoDB from flask.
+- [Werkzeug](https://werkzeug.palletsprojects.com/en/1.0.x/) was used to hash passwords and secure filenames.
+- [WTForms](https://wtforms.readthedocs.io/en/2.3.x/) and [Flask-WTforms](https://flask-wtf.readthedocs.io/en/stable/) were used for server-side form validation.
+- [MDBootstrap](https://mdbootstrap.com/) was for styling, layout and typography.
+- [GitHub](https://github.com/) was used for version control.
+- [Heroku](https://www.heroku.com/) was used for deployment.
 
 ### Issues:
  - ##### Dynamic number of input fields and WTForms validation:

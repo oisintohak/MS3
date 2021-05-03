@@ -199,7 +199,7 @@ def edit_profile():
     form = EditProfileForm(data=user)
     if request.method == 'POST':
         if form.validate_on_submit():
-            update_profile = {'$set': {
+            update = {'$set': {
                 'name': form.name.data,
                 'description': form.description.data,
             }}
@@ -209,8 +209,8 @@ def edit_profile():
                     secured_filename = secure_filename(
                         profile_picture.filename)
                     mongo.save_file(secured_filename, profile_picture)
-                    update_profile['$set']['profile_picture'] = secured_filename
-                    update_profile['$set']['profile_picture_url'] = url_for(
+                    update['$set']['profile_picture'] = secured_filename
+                    update['$set']['profile_picture_url'] = url_for(
                         'file', filename=secured_filename
                     )
                 except RequestEntityTooLarge as e:
@@ -226,7 +226,7 @@ def edit_profile():
                 GridFS(mongo.db).delete(image_ID)
 
             mongo.db.users.update_one(
-                {'_id': ObjectId(user['_id'])}, update_profile)
+                {'_id': ObjectId(user['_id'])}, update)
             flash('Profile Updated')
             return redirect(url_for('profile', user=session['user']))
 
