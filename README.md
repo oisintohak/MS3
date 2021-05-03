@@ -69,5 +69,8 @@ The database will contain 2 collections: Users and Recipes.
 - MDBootstrap
 
 ### Issues:
+ - ##### Dynamic number of input fields and WTForms validation:
+   - For the recipe form I want the user to be able to dyncamically add and remove ingredients while still being able to validate the input with WTForms. I adapted the code found in [this guide](https://www.rmedgar.com/blog/dynamic-fields-flask-wtf/) to render inputs with the correct attributes to allow for WTForms validation.
  - ##### 413 error handling:
-  - When a user uploads a file that is larger than the limit set in flask (MAX_CONTENT_LENGTH), the connection is aborted before the error is handled properly. The browser displays
+  - When a user uploads a file that is larger than the limit set in flask (MAX_CONTENT_LENGTH), the connection is aborted before the error is handled properly. The browser displays a default "ERR_CONNECTION_ABORTED" message. This is the case with a local werkzeug development server, with debug on or off and also when deployed to heroku using gunicorn in production mode.
+  - Solution: I couldn't find a way to get the server to handle the 413 and redirect instead of showing the default browser error page so I decided to validate the file size and extension in Javascript. I added an event listener to the file input which would display an error and disable the form submit button if the user selected a file over 2MB or a file that didn't have a .jpg, .jpeg or .png extension.

@@ -35,7 +35,7 @@
             <!-- Search form -->
             <form method="POST" action="{{ url_for('search') }}" class="d-flex w-auto my-auto">
               <div class="form-outline">
-                <input type="search" id="search" name="search" class="form-control" required min="2" max="30" />
+                <input type="search" id="search" name="search" class="form-control" required minlength="2" maxlength="30" />
                 <label class="form-label" for="search">Search for recipes</label>
               </div>
               <button type="submit" class="btn btn-outline-dark text-primary-color accent-color"
@@ -92,7 +92,6 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
     integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
     crossorigin="anonymous"></script>
-  <script type="text/javascript" src="static/js/mdb.min.js"></script>
   <!-- SCRIPT TO ALLOW DYNAMIC FORMS FOR WTFORMS -->
   <script src="{{ url_for('static', filename='js/dynamicForm.js') }}"></script>
   <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>

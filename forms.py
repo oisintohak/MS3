@@ -14,9 +14,9 @@ class SearchForm(FlaskForm):
         label='Search for recipes',
         validators=[
             validators.Length(
-                min=1, max=30,
+                min=2, max=30,
                 message=(
-                    'Search text must be between 1 and 30 characters.'
+                    'Search text must be between 2 and 30 characters.'
                 )
             )
         ]
@@ -28,7 +28,17 @@ class LoginForm(FlaskForm):
 
     email = EmailField(
         label='Email',
-        validators=[validators.InputRequired('Email is required')]
+        validators=[
+            validators.InputRequired('Email is required'),
+            validators.Length(
+                min=3, max=30,
+                message=('Email must be between 3 and 80 characters.')
+            )
+        ],
+        render_kw={
+            "minlength":3,
+            "maxlength":80
+        }
     )
     password = PasswordField(
         label='Password',
@@ -38,7 +48,11 @@ class LoginForm(FlaskForm):
                 min=3, max=30,
                 message=('Password must be between 3 and 30 characters.')
             )
-        ]
+        ],
+        render_kw={
+            "minlength":3,
+            "maxlength":30
+        }
     )
 
 
@@ -55,7 +69,11 @@ class RegistrationForm(LoginForm):
                 min=3, max=50,
                 message=('Name must be between 3 and 50 characters.')
             )
-        ]
+        ],
+        render_kw={
+            "minlength":2,
+            "maxlength":50
+        }
     )
 
 
@@ -72,7 +90,11 @@ class EditProfileForm(FlaskForm):
                 min=3, max=50,
                 message='Name must be between 3 and 50 characters.'
             )
-        ]
+        ],
+        render_kw={
+            "minlength":3,
+            "maxlength":50
+        }
     )
     description = TextAreaField(
         label='Description',
@@ -83,7 +105,11 @@ class EditProfileForm(FlaskForm):
                 message=('Description must be between 10 and '
                          '280 characters.')
             )
-        ]
+        ],
+        render_kw={
+            "minlength":10,
+            "maxlength":280
+        }
     )
     image = FileField(
         label='Profile Picture',
@@ -106,10 +132,14 @@ class IngredientForm(Form):
         validators=[
             validators.InputRequired('Quantity is required'),
             validators.Length(
-                min=0, max=30,
-                message='Quantity must be between 0 and 30 characters.'
+                min=1, max=30,
+                message='Quantity must be between 1 and 30 characters.'
             )
-        ]
+        ],
+        render_kw={
+            "minlength":1,
+            "maxlength":30
+        }
     )
     ingredient = StringField(
         label='Ingredient',
@@ -119,7 +149,11 @@ class IngredientForm(Form):
                 min=1, max=40,
                 message='Ingredient must be between 1 and 40 characters.'
             )
-        ]
+        ],
+        render_kw={
+            "minlength":1,
+            "maxlength":40
+        }
     )
 
 
@@ -137,7 +171,11 @@ class AddRecipeForm(FlaskForm):
                 min=3, max=50,
                 message='Name must be between 3 and 50 characters.'
             )
-        ]
+        ],
+        render_kw={
+            "minlength":3,
+            "maxlength":50
+        }
     )
     ingredients = FieldList(
         FormField(IngredientForm),
@@ -152,7 +190,11 @@ class AddRecipeForm(FlaskForm):
                 min=10, max=2000,
                 message='Instructions must be between 10 and 2000 characters.'
             )
-        ]
+        ],
+        render_kw={
+            "minlength":10,
+            "maxlength":2000
+        }
     )
     servings = IntegerField(
         label='Servings',
@@ -162,7 +204,11 @@ class AddRecipeForm(FlaskForm):
                 min=1, max=100,
                 message='Servings must be between 1 and 100.'
             )
-        ]
+        ],
+        render_kw={
+            "min":1,
+            "max":100
+        }
     )
     time_required = IntegerField(
         label='Time required (minutes)',
@@ -174,7 +220,11 @@ class AddRecipeForm(FlaskForm):
                 min=1, max=1000,
                 message='Time required must be between 1 and 1000 (minutes).'
             )
-        ]
+        ],
+        render_kw={
+            "min":1,
+            "max":1000
+        }
     )
     image = FileField(
         label='Recipe Image',
