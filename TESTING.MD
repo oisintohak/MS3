@@ -38,7 +38,7 @@ I used [PEP8 online](http://pep8online.com/) to validate the Python:
  - Users can add a recipe and upload a picture: passed
  - Users can edit a recipe and upload a different picture: passed
  - Users must be logged in to add or edit a recipe: passed
- - Files larger than 2MB or with an unnaccepted extension cannot be uploaded: passed
+ - Files larger than 2MB or with an unaccepted extension cannot be uploaded: passed
  - Inputs on the recipe form are validated: passed
  - Users can delete a recipe: passed
  - Users can only delete their own recipes: passed
@@ -46,7 +46,7 @@ I used [PEP8 online](http://pep8online.com/) to validate the Python:
  - Users can delete their profile: passed
  - Users can search for recipes: passed
  - Users can view a dedicated recipe page: passed
- - A 404 page is displayed when navigating to an unknow page or resource
+ - A 404 page is displayed when navigating to an unknown page or resource
 
 ## Responsiveness and Browser compatibility
 
