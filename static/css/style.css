@@ -114,6 +114,14 @@ body {
     background-color: var(--light-primary-background);
 }
 
+
+@media (max-width: 350px) {
+    .form-outline #search-label {
+        font-size: .8rem;
+        padding-top: .55rem;
+    }
+}
+
 .dropdown-menu, .dropdown-item {
     background-color: var(--light-primary-color);
 }

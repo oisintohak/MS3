@@ -36,8 +36,8 @@
             <!-- Search form -->
             <form method="POST" action="{{ url_for('search') }}" class="d-flex w-auto my-auto">
               <div class="form-outline">
-                <input type="search" id="search" name="search" class="form-control" required minlength="2" maxlength="30" />
-                <label class="form-label" for="search">Search for recipes</label>
+                <input type="search" id="search" name="search" class="form-control form-control-sm" required minlength="2" maxlength="30" />
+                <label class="form-label" id="search-label" for="search">Search for recipes</label>
               </div>
               <button type="submit" class="btn btn-outline-dark text-primary-color accent-color"
                 data-mdb-ripple-color="dark">

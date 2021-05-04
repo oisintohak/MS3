@@ -3,6 +3,9 @@ This is a website where users can add recipes or search for recipes other users 
 
 [Link to live project](https://we-cook-recipe-sharing.herokuapp.com/)
 
+![Multi Device Website Mockup](wireframes/mockup.jpg)
+
+
 ---
 
 ### User Stories:
