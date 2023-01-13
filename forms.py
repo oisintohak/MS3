@@ -2,7 +2,7 @@ from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import (Form, StringField, IntegerField, PasswordField,
                      TextAreaField, FormField, FieldList, validators)
-from wtforms.fields.html5 import EmailField
+from wtforms.fields import EmailField
 
 image_extensions = {'png', 'jpg', 'jpeg'}
 
